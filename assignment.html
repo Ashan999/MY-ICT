@@ -1233,12 +1233,17 @@
       return;
     }
 
-    // temporarily force a desktop width on the container to stop mobile squashing
+    // store original inline styles
     const originalContainerWidth = containerElement.style.width;
-    containerElement.style.width = '1050px';
-    // also ensure the inner certificate matches (optional but safe)
+    const originalContainerHeight = containerElement.style.height;
     const originalCertWidth = certificateElement.style.width;
-    certificateElement.style.width = '1050px';
+    const originalCertHeight = certificateElement.style.height;
+
+    // force exact desktop dimensions (297mm x 210mm in pixels ~1122x794)
+    containerElement.style.width = '1122px';
+    containerElement.style.height = '794px';
+    certificateElement.style.width = '1122px';
+    certificateElement.style.height = '794px';
 
     // Show loading state
     const downloadBtn = document.querySelector('.download-btn');
@@ -1253,22 +1258,29 @@
       backgroundColor: null,
       width: certificateElement.offsetWidth,
       height: certificateElement.offsetHeight,
-      windowWidth: 1050,
-      windowHeight: certificateElement.scrollHeight,
+      windowWidth: 1122,
+      windowHeight: 794,
       allowTaint: false,
       scrollX: 0,
       scrollY: 0,
-      windowScrollY: 0
+      windowScrollY: 0,
+      onclone: function(clonedDoc) {
+        const clonedCert = clonedDoc.getElementById('certificate');
+        const clonedContainer = clonedDoc.querySelector('.certificate-container');
+        if (clonedCert) {
+          clonedCert.style.display = 'block';
+          clonedCert.style.width = '1122px';
+          clonedCert.style.height = '794px';
+        }
+        if (clonedContainer) {
+          clonedContainer.style.width = '1122px';
+          clonedContainer.style.height = '794px';
+        }
+      }
     }).then(function(canvas) {
       try {
-        const { jsPDF } = window.jspdf;
-        // match canvas size exactly to avoid footer cuts
-        const pdf = new jsPDF({
-          orientation: 'landscape',
-          unit: 'px',
-          format: [canvas.width, canvas.height]
-        });
-
+        // initialize jsPDF with exact canvas size
+        const pdf = new jspdf.jsPDF('l', 'px', [canvas.width, canvas.height]);
         const imgData = canvas.toDataURL('image/png', 1.0);
         pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height, undefined, 'FAST');
         const fileName = 'ICT_Certificate_' + (studentName.replace(/\s+/g, '_')) + '.pdf';
@@ -1281,9 +1293,11 @@
       console.error('Error capturing certificate:', error);
       alert('Error capturing certificate. Please try again.');
     }).finally(function() {
-      // restore original widths and button state
+      // reset styles and button state
       containerElement.style.width = originalContainerWidth;
+      containerElement.style.height = originalContainerHeight;
       certificateElement.style.width = originalCertWidth;
+      certificateElement.style.height = originalCertHeight;
       downloadBtn.disabled = false;
       downloadBtn.textContent = originalText;
     });
