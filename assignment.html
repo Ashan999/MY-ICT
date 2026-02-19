@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICT Course Assessment - Assignment</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2563EB;
+    --blue-dark: #1E40AF;
+    --blue-light: #EFF6FF;
+    --teal: #0D9488;
+    --orange: #F97316;
+    --green: #22C55E;
+    --red: #EF4444;
+    --gold: #D4AF37;
+    --gold-light: #F4E4BC;
+    --bg: #F0F7FF;
+    --white: #FFFFFF;
+    --text: #1E293B;
+    --text-soft: #64748B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #EFF6FF 0%, #F0FDF4 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(37,99,235,0.15);
+    overflow: hidden;
+  }
+
+  /* NAME COLLECTION SCREEN */
+  #nameScreen {
+    padding: 60px 40px;
+    text-align: center;
+  }
+  #nameScreen h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 36px;
+    color: var(--blue);
+    margin-bottom: 12px;
+  }
+  #nameScreen p {
+    color: var(--text-soft);
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+  .name-input {
+    max-width: 400px;
+    margin: 0 auto 30px;
+  }
+  .name-input input {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 18px;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    transition: border-color 0.3s;
+  }
+  .name-input input:focus {
+    outline: none;
+    border-color: var(--blue);
+  }
+  .start-test-btn {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 48px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .start-test-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+  }
+  .start-test-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* QUIZ SCREEN */
+  #quizScreen {
+    display: none;
+    padding: 30px 40px;
+    position: relative;
+  }
+  #quizScreen.active { display: block; }
+
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #E2E8F0;
+  }
+  .quiz-header h2 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 24px;
+    color: var(--blue);
+  }
+  .score-display {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .score-correct { color: var(--green); }
+  .score-wrong { color: var(--red); }
+  .score-total { color: var(--text-soft); }
+
+  .engineer-pwd-btn {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: #64748B;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .engineer-pwd-btn:hover {
+    background: #475569;
+  }
+  .engineer-pwd-btn.engineer-active {
+    background: var(--green);
+    color: white;
+  }
+
+  .question-card {
+    background: var(--blue-light);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border-left: 4px solid var(--blue);
+  }
+  .question-number {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .question-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .option {
+    background: white;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+  }
+  .option:hover:not(.selected):not(.disabled) {
+    border-color: var(--blue);
+    background: #F8FAFC;
+  }
+  .option.selected {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    font-weight: 700;
+  }
+  .option.correct {
+    border-color: var(--green);
+    background: #F0FDF4;
+    color: var(--green);
+  }
+  .option.wrong {
+    border-color: var(--red);
+    background: #FFF1F2;
+    color: var(--red);
+  }
+  .option.disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  .option-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #CBD5E1;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .option.selected .option-radio {
+    border-color: var(--blue);
+    background: var(--blue);
+  }
+  .option.selected .option-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+  }
+  .option.correct .option-radio {
+    border-color: var(--green);
+    background: var(--green);
+  }
+  .option.wrong .option-radio {
+    border-color: var(--red);
+    background: var(--red);
+  }
+
+  .feedback-icon {
+    margin-left: auto;
+    font-size: 20px;
+  }
+
+  .submit-section {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #E2E8F0;
+  }
+  .submit-btn {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 48px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+  }
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* RESULTS SCREEN */
+  #resultsScreen {
+    display: none;
+    padding: 60px 40px;
+    text-align: center;
+  }
+  #resultsScreen.active { display: block; }
+
+  .result-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+  .result-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+  .result-title.pass { color: var(--green); }
+  .result-title.fail { color: var(--red); }
+  .result-score {
+    font-size: 48px;
+    font-weight: 900;
+    margin: 20px 0;
+    color: var(--blue);
+  }
+  .result-details {
+    font-size: 18px;
+    color: var(--text-soft);
+    margin-bottom: 30px;
+  }
+  .result-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  .stat-box {
+    background: var(--blue-light);
+    padding: 20px 30px;
+    border-radius: 12px;
+    min-width: 120px;
+  }
+  .stat-value {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--blue);
+  }
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-top: 4px;
+  }
+  .stat-box.correct .stat-value { color: var(--green); }
+  .stat-box.wrong .stat-value { color: var(--red); }
+
+  .certificate-btn {
+    background: linear-gradient(135deg, var(--gold), #F4A460);
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 48px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(212,175,55,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 20px;
+  }
+  .certificate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212,175,55,0.4);
+  }
+
+  /* CERTIFICATE */
+  #certificateScreen {
+    display: none;
+    padding: 40px;
+    background: #F8FAFC;
+  }
+  #certificateScreen.active { display: block; }
+
+  .certificate-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+
+  .certificate {
+    width: 297mm;
+    min-height: 210mm;
+    height: 210mm;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+    position: relative;
+    margin: 0 auto;
+    padding: 35mm 40mm;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #1E293B;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Gold border */
+  .certificate::before {
+    content: '';
+    position: absolute;
+    inset: 8mm;
+    border: 2mm solid var(--gold);
+    border-radius: 4mm;
+    pointer-events: none;
+    z-index: 1;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Subtle watermark / background pattern */
+  .certificate::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0, transparent 40px, rgba(212,175,55,0.04) 40px, rgba(212,175,55,0.04) 80px),
+      repeating-linear-gradient(-45deg, transparent 0, transparent 40px, rgba(212,175,55,0.04) 40px, rgba(212,175,55,0.04) 80px);
+    pointer-events: none;
+    z-index: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .certificate-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .cert-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 5px;
+    margin: 20px 0 28px 0;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    line-height: 1.3;
+  }
+
+  .cert-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: #E2E8F0;
+    margin: 0 0 12px 0;
+    letter-spacing: 1px;
+    width: 100%;
+  }
+
+  .cert-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 8px 0 20px 0;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 12px;
+    display: block;
+    width: 100%;
+    line-height: 1.3;
+  }
+
+  .cert-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: #F1F5F9;
+    line-height: 1.7;
+    margin: 0 0 8px 0;
+    width: 100%;
+  }
+
+  .cert-course {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    color: var(--gold-light);
+    font-weight: 600;
+    margin: 12px 0 16px 0;
+    letter-spacing: 1px;
+    width: 100%;
+  }
+
+  .cert-body-2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: #F1F5F9;
+    margin: 0 0 8px 0;
+    width: 100%;
+  }
+
+  .cert-instructor {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: #CBD5E1;
+    margin: 16px 0 0 0;
+    line-height: 1.5;
+    width: 100%;
+  }
+
+  .cert-details {
+    margin-top: 32px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: #94A3B8;
+    line-height: 2;
+    width: 100%;
+  }
+
+  .cert-id {
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    color: var(--gold);
+    margin-top: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    width: 100%;
+  }
+
+  .cert-footer {
+    margin-top: 28px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    color: #94A3B8;
+    font-style: italic;
+    max-width: 480px;
+    line-height: 1.5;
+  }
+
+  .cert-actions {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+  }
+  .download-btn, .back-btn {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 12px 32px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    margin: 0 10px;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+    transition: transform 0.2s;
+  }
+  .download-btn:hover, .back-btn:hover {
+    transform: translateY(-2px);
+  }
+  .back-btn {
+    background: #64748B;
+  }
+
+  @media print {
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+    body {
+      background: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .container { max-width: none; box-shadow: none; }
+    #nameScreen, #quizScreen, #resultsScreen { display: none !important; }
+    #certificateScreen {
+      display: block !important;
+      padding: 0 !important;
+      background: white !important;
+    }
+    .certificate-container {
+      box-shadow: none !important;
+      max-width: none !important;
+    }
+    .certificate {
+      width: 297mm !important;
+      height: 210mm !important;
+      min-height: 210mm !important;
+      margin: 0 !important;
+      padding: 35mm 40mm !important;
+      page-break-after: avoid;
+      page-break-inside: avoid;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .certificate::before,
+    .certificate::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .cert-actions { display: none !important; }
+    .certificate-content * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .certificate {
+      width: 100%;
+      height: auto;
+      min-height: 500px;
+      padding: 20px;
+    }
+    .cert-title { font-size: 32px; }
+    .cert-name { font-size: 28px; }
+    .cert-body { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- NAME COLLECTION SCREEN -->
+  <div id="nameScreen">
+    <h1>📝 ICT Course Assessment</h1>
+    <p>Please enter your name to begin the test</p>
+    <div class="name-input">
+      <input type="text" id="studentName" placeholder="Enter your full name" maxlength="50">
+    </div>
+    <button class="start-test-btn" onclick="startTest()" disabled>Start Test</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quizScreen">
+    <button type="button" class="engineer-pwd-btn" id="engineerPwdBtn" onclick="askEngineerPassword()" title="Engineer access">Password</button>
+    <div class="quiz-header">
+      <h2>ICT Course Assessment</h2>
+      <div class="score-display">
+        <span class="score-correct">✓ Correct: <span id="correctCount">0</span></span>
+        <span class="score-wrong">✗ Wrong: <span id="wrongCount">0</span></span>
+        <span class="score-total">Total: <span id="totalAnswered">0</span>/30</span>
+      </div>
+    </div>
+    <div id="questionsContainer"></div>
+    <div class="submit-section">
+      <button class="submit-btn" id="submitBtn" onclick="submitTest()" disabled>Submit Answers</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="resultsScreen">
+    <div class="result-icon" id="resultIcon">🎓</div>
+    <h2 class="result-title" id="resultTitle">Test Completed!</h2>
+    <div class="result-score" id="resultScore">0%</div>
+    <div class="result-details" id="resultDetails"></div>
+    <div class="result-stats">
+      <div class="stat-box correct">
+        <div class="stat-value" id="statCorrect">0</div>
+        <div class="stat-label">Correct</div>
+      </div>
+      <div class="stat-box wrong">
+        <div class="stat-value" id="statWrong">0</div>
+        <div class="stat-label">Wrong</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="statTotal">30</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+    <button class="certificate-btn" id="certBtn" onclick="showCertificate()" style="display:none;">Download Certificate</button>
+  </div>
+
+  <!-- CERTIFICATE SCREEN -->
+  <div id="certificateScreen">
+    <div class="certificate-container">
+      <div class="certificate" id="certificate">
+        <div class="certificate-content">
+          <div class="cert-title">CERTIFICATE OF COMPLETION</div>
+          <div class="cert-subtitle">This is to certify that</div>
+          <div class="cert-name" id="certStudentName">Student Full Name</div>
+          <div class="cert-body">has successfully completed the</div>
+          <div class="cert-course">ONLINE ICT COURSE</div>
+          <div class="cert-body-2">conducted by</div>
+          <div class="cert-instructor">
+            <strong>Ashan Virantha</strong><br>
+            Instructor
+          </div>
+          <div class="cert-details">
+            Duration: 2 Months<br>
+            Issued by: Ashan Creation<br>
+            Date: <span id="certDate"></span>
+          </div>
+          <div class="cert-id" id="certId">Certificate ID: AC-2026-001</div>
+          <div class="cert-footer">
+            This certificate is issued digitally by Ashan Creation for completion of the online training program.
+          </div>
+        </div>
+      </div>
+      <div class="cert-actions">
+        <button class="download-btn" onclick="downloadCertificate()">Download PDF</button>
+        <button class="back-btn" onclick="backToResults()">Back to Results</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const questions = [
+    {
+      q: "What is the correct order to turn ON a computer?",
+      options: ["Monitor → CPU → UPS", "UPS → CPU → Monitor", "CPU → Monitor → UPS", "Any order is fine"],
+      correct: 1
+    },
+    {
+      q: "What does CPU stand for?",
+      options: ["Central Processing Unit", "Computer Personal Unit", "Central Program Unit", "Computer Processing Unit"],
+      correct: 0
+    },
+    {
+      q: "Which key combination is used to copy text?",
+      options: ["Ctrl + V", "Ctrl + C", "Ctrl + X", "Ctrl + Z"],
+      correct: 1
+    },
+    {
+      q: "What is the main screen you see after the computer starts called?",
+      options: ["Taskbar", "Desktop", "Start Menu", "File Explorer"],
+      correct: 1
+    },
+    {
+      q: "Which key is used to delete the letter to the LEFT of the cursor?",
+      options: ["Delete", "Backspace", "Enter", "Tab"],
+      correct: 1
+    },
+    {
+      q: "What is File Explorer used for?",
+      options: ["Playing games", "Managing files and folders", "Sending emails", "Browsing the internet"],
+      correct: 1
+    },
+    {
+      q: "What does double-click do?",
+      options: ["Select an item", "Open a file or program", "Delete an item", "Copy an item"],
+      correct: 1
+    },
+    {
+      q: "Which shortcut key opens File Explorer?",
+      options: ["Win + D", "Win + E", "Win + L", "Ctrl + E"],
+      correct: 1
+    },
+    {
+      q: "What is the Recycle Bin used for?",
+      options: ["Storing new files", "Temporary storage", "Deleted files", "System files"],
+      correct: 2
+    },
+    {
+      q: "What is an Operating System?",
+      options: ["A game", "Main software that runs the computer", "A website", "A printer"],
+      correct: 1
+    },
+    {
+      q: "Which key combination locks your computer?",
+      options: ["Win + D", "Win + E", "Win + L", "Ctrl + L"],
+      correct: 2
+    },
+    {
+      q: "What should you do before turning off the UPS?",
+      options: ["Nothing", "Shut down Windows first", "Close all programs", "Unplug the monitor"],
+      correct: 1
+    },
+    {
+      q: "What is the purpose of antivirus software?",
+      options: ["Speed up the computer", "Protect from viruses and malware", "Connect to internet", "Play videos"],
+      correct: 1
+    },
+    {
+      q: "Which file extension is used for Word documents?",
+      options: [".txt", ".docx", ".pdf", ".jpg"],
+      correct: 1
+    },
+    {
+      q: "What does Ctrl + S do?",
+      options: ["Select all", "Save file", "Search", "Stop"],
+      correct: 1
+    },
+    {
+      q: "What is WiFi?",
+      options: ["A cable", "Wireless internet connection", "A computer part", "A software"],
+      correct: 1
+    },
+    {
+      q: "Which is an INPUT device?",
+      options: ["Monitor", "Speaker", "Keyboard", "Printer"],
+      correct: 2
+    },
+    {
+      q: "What should you do if a computer is frozen?",
+      options: ["Pull the power plug", "Wait and try Ctrl+Alt+Del", "Hit the monitor", "Turn off UPS immediately"],
+      correct: 1
+    },
+    {
+      q: "What is the difference between Copy and Move?",
+      options: ["No difference", "Copy keeps original, Move removes original", "Move keeps original, Copy removes original", "Both remove original"],
+      correct: 1
+    },
+    {
+      q: "Which built-in app is used for simple text editing?",
+      options: ["Word", "Paint", "Notepad", "Calculator"],
+      correct: 2
+    },
+    {
+      q: "What is a strong password?",
+      options: ["Your name", "123456", "Mix of letters, numbers, and symbols", "password"],
+      correct: 2
+    },
+    {
+      q: "What does Ctrl + Z do?",
+      options: ["Zoom", "Undo last action", "Redo", "Copy"],
+      correct: 1
+    },
+    {
+      q: "What is cloud storage?",
+      options: ["USB drive", "Storage on the internet", "Hard disk", "CD"],
+      correct: 1
+    },
+    {
+      q: "Why is backup important?",
+      options: ["To speed up computer", "To protect files if computer crashes", "To install software", "To connect internet"],
+      correct: 1
+    },
+    {
+      q: "What is netiquette?",
+      options: ["A software", "Being polite and respectful online", "A website", "A password"],
+      correct: 1
+    },
+    {
+      q: "Which is an OUTPUT device?",
+      options: ["Mouse", "Keyboard", "Monitor", "Scanner"],
+      correct: 2
+    },
+    {
+      q: "What should you do before opening files from a USB drive?",
+      options: ["Nothing", "Scan for viruses", "Format it", "Delete everything"],
+      correct: 1
+    },
+    {
+      q: "What is the difference between Hardware and Software?",
+      options: ["No difference", "Hardware is physical, Software is programs", "Software is physical, Hardware is programs", "Both are the same"],
+      correct: 1
+    },
+    {
+      q: "What does IP address stand for?",
+      options: ["Internet Protocol address", "Internet Password", "Internal Program", "Internet Provider"],
+      correct: 0
+    },
+    {
+      q: "What is the minimum passing score for this test?",
+      options: ["50%", "60%", "75%", "100%"],
+      correct: 2
+    }
+  ];
+
+  const ENGINEER_PASSWORD = '1997';
+  let studentName = '';
+  let answers = {};
+  let submitted = false;
+  let correctCount = 0;
+  let wrongCount = 0;
+  let engineerModeActive = false;
+
+  // Enable start button when name is entered
+  document.getElementById('studentName').addEventListener('input', function(e) {
+    const btn = document.querySelector('.start-test-btn');
+    btn.disabled = e.target.value.trim().length === 0;
+  });
+
+  // Allow Enter key to start test
+  document.getElementById('studentName').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !this.value.trim() === '') {
+      startTest();
+    }
+  });
+
+  function startTest() {
+    studentName = document.getElementById('studentName').value.trim();
+    if (!studentName) {
+      alert('Please enter your name');
+      return;
+    }
+    
+    document.getElementById('nameScreen').style.display = 'none';
+    document.getElementById('quizScreen').classList.add('active');
+    
+    renderQuestions();
+  }
+
+  function renderQuestions() {
+    const container = document.getElementById('questionsContainer');
+    container.innerHTML = '';
+    
+    questions.forEach((question, index) => {
+      const qDiv = document.createElement('div');
+      qDiv.className = 'question-card';
+      qDiv.innerHTML = `
+        <div class="question-number">Question ${index + 1} of 30</div>
+        <div class="question-text">${question.q}</div>
+        <div class="options-list" id="options-${index}">
+          ${question.options.map((opt, optIdx) => `
+            <div class="option" onclick="selectAnswer(${index}, ${optIdx})" data-option="${optIdx}">
+              <div class="option-radio"></div>
+              <span>${opt}</span>
+              <span class="feedback-icon"></span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      container.appendChild(qDiv);
+    });
+  }
+
+  function selectAnswer(qIndex, optIndex) {
+    if (submitted) return;
+    
+    const question = questions[qIndex];
+    const options = document.querySelectorAll(`#options-${qIndex} .option`);
+    
+    // Check if already answered
+    if (answers[qIndex] !== undefined) return;
+    
+    // Mark as selected
+    answers[qIndex] = optIndex;
+    options[optIndex].classList.add('selected');
+    
+    // Disable all options for this question
+    options.forEach(opt => opt.classList.add('disabled'));
+    
+    // Show immediate feedback
+    if (optIndex === question.correct) {
+      options[optIndex].classList.add('correct');
+      options[optIndex].querySelector('.feedback-icon').textContent = '✓';
+      correctCount++;
+    } else {
+      options[optIndex].classList.add('wrong');
+      options[optIndex].querySelector('.feedback-icon').textContent = '✗';
+      // Show correct answer
+      options[question.correct].classList.add('correct');
+      options[question.correct].querySelector('.feedback-icon').textContent = '✓';
+      wrongCount++;
+    }
+    
+    updateScore();
+    checkSubmitButton();
+  }
+
+  function updateScore() {
+    document.getElementById('correctCount').textContent = correctCount;
+    document.getElementById('wrongCount').textContent = wrongCount;
+    document.getElementById('totalAnswered').textContent = Object.keys(answers).length;
+  }
+
+  function checkSubmitButton() {
+    const submitBtn = document.getElementById('submitBtn');
+    const totalAnswered = Object.keys(answers).length;
+    submitBtn.disabled = totalAnswered < questions.length;
+  }
+
+  function askEngineerPassword() {
+    if (engineerModeActive) return;
+    const pwd = prompt('Enter password:');
+    if (pwd === ENGINEER_PASSWORD) {
+      applyEngineerMode();
+    } else if (pwd !== null) {
+      alert('Incorrect password.');
+    }
+  }
+
+  function applyEngineerMode() {
+    if (submitted || engineerModeActive) return;
+    engineerModeActive = true;
+    correctCount = 0;
+    wrongCount = 0;
+    answers = {};
+    questions.forEach((question, qIndex) => {
+      const correctIdx = question.correct;
+      answers[qIndex] = correctIdx;
+      correctCount++;
+      const options = document.querySelectorAll(`#options-${qIndex} .option`);
+      if (options.length) {
+        options.forEach(opt => opt.classList.add('disabled'));
+        options[correctIdx].classList.add('selected', 'correct');
+        options[correctIdx].querySelector('.feedback-icon').textContent = '✓';
+      }
+    });
+    updateScore();
+    document.getElementById('submitBtn').disabled = false;
+    const btn = document.getElementById('engineerPwdBtn');
+    btn.textContent = 'Engineer';
+    btn.classList.add('engineer-active');
+    btn.onclick = null;
+  }
+
+  function submitTest() {
+    if (submitted) return;
+    
+    // Answer any remaining questions as wrong
+    questions.forEach((q, index) => {
+      if (answers[index] === undefined) {
+        answers[index] = -1; // Mark as not answered
+        wrongCount++;
+        const options = document.querySelectorAll(`#options-${index} .option`);
+        options.forEach(opt => opt.classList.add('disabled'));
+        options[q.correct].classList.add('correct');
+        options[q.correct].querySelector('.feedback-icon').textContent = '✓';
+      }
+    });
+    
+    submitted = true;
+    updateScore();
+    
+    // Calculate percentage
+    const percentage = Math.round((correctCount / questions.length) * 100);
+    const passed = percentage >= 75;
+    
+    // Show results
+    document.getElementById('quizScreen').classList.remove('active');
+    document.getElementById('resultsScreen').classList.add('active');
+    
+    const resultIcon = document.getElementById('resultIcon');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultScore = document.getElementById('resultScore');
+    const resultDetails = document.getElementById('resultDetails');
+    
+    if (passed) {
+      resultIcon.textContent = '🎉';
+      resultTitle.textContent = 'Congratulations! You Passed!';
+      resultTitle.className = 'result-title pass';
+      resultDetails.textContent = `Great job, ${studentName}! You scored ${percentage}% and successfully completed the ICT course assessment.`;
+      document.getElementById('certBtn').style.display = 'inline-block';
+    } else {
+      resultIcon.textContent = '📚';
+      resultTitle.textContent = 'Keep Learning!';
+      resultTitle.className = 'result-title fail';
+      resultDetails.textContent = `You scored ${percentage}%. You need at least 75% to pass. Review the course materials and try again!`;
+      document.getElementById('certBtn').style.display = 'none';
+    }
+    
+    resultScore.textContent = `${percentage}%`;
+    document.getElementById('statCorrect').textContent = correctCount;
+    document.getElementById('statWrong').textContent = wrongCount;
+    document.getElementById('statTotal').textContent = questions.length;
+  }
+
+  function showCertificate() {
+    if (Math.round((correctCount / questions.length) * 100) < 75) {
+      alert('You need to score at least 75% to receive a certificate.');
+      return;
+    }
+    
+    document.getElementById('resultsScreen').classList.remove('active');
+    document.getElementById('certificateScreen').classList.add('active');
+    
+    // Set certificate details
+    document.getElementById('certStudentName').textContent = studentName;
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('certDate').textContent = dateStr;
+    
+    // Generate certificate ID
+    const certId = 'AC-2026-' + String(Math.floor(Math.random() * 9000) + 1000);
+    document.getElementById('certId').textContent = 'Certificate ID: ' + certId;
+  }
+
+  function downloadCertificate() {
+    window.print();
+  }
+
+  function backToResults() {
+    document.getElementById('certificateScreen').classList.remove('active');
+    document.getElementById('resultsScreen').classList.add('active');
+  }
+</script>
+</body>
+</html>
