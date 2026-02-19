@@ -294,6 +294,21 @@
     box-shadow: var(--shadow);
   }
 
+  /* UNIT OBJECTIVES (training system) */
+  .unit-objectives {
+    background: linear-gradient(135deg, #EFF6FF, #F0FDF4);
+    border: 2px solid var(--teal);
+    border-radius: 14px;
+    padding: 12px 18px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    animation: fade-up 0.5s 0.1s both;
+  }
+  .unit-objectives .obj-label { color: var(--blue); display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .unit-objectives ul { margin: 0; padding-left: 18px; line-height: 1.6; }
+
   /* STEPS */
   .steps-list { display: flex; flex-direction: column; gap: 10px; }
   .step-item {
@@ -436,6 +451,10 @@
             <div class="slide-num">Unit 01</div>
             <div class="slide-title">Main Parts of a Computer</div>
           </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>Names and roles of main parts: Monitor, Keyboard, Mouse, CPU, Speakers, UPS</li><li>Correct order to turn ON the computer</li></ul>
         </div>
         <div class="cards-grid">
           <div class="info-card">
@@ -1185,7 +1204,454 @@
           </div>
           <div class="tip-box" style="margin-top:12px">
             <span class="tip-icon">🎓</span>
-            <p>Amazing! You've completed all 19 ICT units! You are now an ICT Explorer! 🚀⭐</p>
+            <p>You've completed the core ICT units! Continue with the next modules for a complete training. 🚀⭐</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 20: Starting & Shutting Down -->
+      <div class="slide" data-unit="20">
+        <div class="slide-header">
+          <div class="slide-emoji">🔌</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 20</div>
+            <div class="slide-title">Starting & Shutting Down the Computer</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>Correct order to turn ON and OFF the computer</li><li>What is login and lock screen</li><li>Why proper shutdown matters</li></ul>
+        </div>
+        <div class="slide-scroll">
+          <div class="cards-grid" style="margin-bottom:14px">
+            <div class="info-card">
+              <div class="card-icon">🔌</div>
+              <div class="card-title">Turn ON — Correct Order</div>
+              <div class="card-text">1. Turn ON UPS (if you have one) → 2. Turn ON CPU/Cabinet → 3. Turn ON Monitor. Wait for Windows to load!</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">🖥️</div>
+              <div class="card-title">Login Screen</div>
+              <div class="card-text">After power on, you see the login screen. Click your user account and type your password to enter Windows.</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">🔒</div>
+              <div class="card-title">Lock Screen (Win + L)</div>
+              <div class="card-text">When you step away, press Win+L to lock the computer. No one can use it without your password!</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">⏻</div>
+              <div class="card-title">Shut Down — Correct Way</div>
+              <div class="card-text">Click Start → Power → Shut down. Wait until the computer turns off completely, then turn OFF monitor and UPS.</div>
+            </div>
+          </div>
+          <div class="warn-box">
+            <span class="tip-icon">⚠️</span>
+            <p>Never pull the power plug or switch off UPS while Windows is running! Always use Shut down first. This saves your files and keeps the computer healthy.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 21: Operating System -->
+      <div class="slide" data-unit="21">
+        <div class="slide-header">
+          <div class="slide-emoji">🪟</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 21</div>
+            <div class="slide-title">What is an Operating System?</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>What an operating system (OS) does</li><li>Why we need an OS</li><li>Common operating systems</li></ul>
+        </div>
+        <div class="hero-visual">🪟 💻 📱 🍎</div>
+        <div class="cards-grid">
+          <div class="info-card">
+            <div class="card-icon">🪟</div>
+            <div class="card-title">What is an OS?</div>
+            <div class="card-text">The Operating System is the main software that runs the computer. It manages files, programs, memory, and lets you use the keyboard, mouse, and screen!</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🖥️</div>
+            <div class="card-title">Windows</div>
+            <div class="card-text">Windows is the most common OS on PCs. You might use Windows 10 or Windows 11. It has Desktop, Start menu, File Explorer, and runs programs.</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🍎</div>
+            <div class="card-title">Other OS — Mac, Linux, Android</div>
+            <div class="card-text">Apple computers use macOS. Phones use Android or iOS. Some PCs use Linux. Each OS looks different but does similar jobs!</div>
+          </div>
+        </div>
+        <div class="tip-box">
+          <span class="tip-icon">💡</span>
+          <p>Without an OS, the computer cannot run programs or show you a desktop. The OS is like the "manager" of the whole computer!</p>
+        </div>
+      </div>
+
+      <!-- UNIT 22: Windows Settings -->
+      <div class="slide" data-unit="22">
+        <div class="slide-header">
+          <div class="slide-emoji">⚙️</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 22</div>
+            <div class="slide-title">Windows Settings (Modern)</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>How to open Windows Settings</li><li>Common settings: Display, Sound, Network</li><li>Difference between Settings and Control Panel</li></ul>
+        </div>
+        <div class="slide-scroll">
+          <div class="wide-card" style="margin-bottom:14px">
+            <div class="card-title" style="margin-bottom:8px">🚀 Open Settings</div>
+            <div class="tag-row">
+              <span class="tag">⊞ Win + I</span>
+              <span class="tag green">Start → Settings (gear icon)</span>
+              <span class="tag orange">Action Center → All settings</span>
+            </div>
+          </div>
+          <div class="cards-grid">
+            <div class="info-card">
+              <div class="card-icon">🖥️</div>
+              <div class="card-title">System — Display & Sound</div>
+              <div class="card-text">Change screen brightness, resolution, and volume. Set default speakers and microphone.</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">📶</div>
+              <div class="card-title">Network & Internet</div>
+              <div class="card-text">Connect to WiFi, see your connection, set up Ethernet. Turn airplane mode on or off.</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">🔒</div>
+              <div class="card-title">Accounts</div>
+              <div class="card-text">Add or remove user accounts, change password, sign-in options (PIN, picture password).</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">🛡️</div>
+              <div class="card-title">Update & Security</div>
+              <div class="card-text">Windows Update, Windows Security (Defender), Backup, Recovery. Keep your PC safe and up to date!</div>
+            </div>
+          </div>
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <p>Settings is the modern way to change options in Windows 10/11. Control Panel still exists for advanced options like Uninstall a program.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 23: User Accounts & Passwords -->
+      <div class="slide" data-unit="23">
+        <div class="slide-header">
+          <div class="slide-emoji">👤</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 23</div>
+            <div class="slide-title">User Accounts & Passwords</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>Why we use user accounts and passwords</li><li>How to change your password</li><li>PIN and other sign-in options</li></ul>
+        </div>
+        <div class="cards-grid">
+          <div class="info-card">
+            <div class="card-icon">👤</div>
+            <div class="card-title">User Account</div>
+            <div class="card-text">Each person can have their own account. Your files, desktop, and settings stay separate. Good for school labs and shared computers!</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🔑</div>
+            <div class="card-title">Password</div>
+            <div class="card-text">A strong password protects your account. Never share it! Use letters, numbers, and symbols. Change it if you think someone knows it.</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🔢</div>
+            <div class="card-title">PIN (Faster Sign-in)</div>
+            <div class="card-text">You can set a short PIN (numbers only) for faster login. Settings → Accounts → Sign-in options → PIN.</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🔄</div>
+            <div class="card-title">Change Password</div>
+            <div class="card-text">Settings → Accounts → Sign-in options → Password → Change. You need your current password to set a new one.</div>
+          </div>
+        </div>
+        <div class="warn-box">
+          <span class="tip-icon">⚠️</span>
+          <p>Never write your password on a sticky note or share it with friends. If you forget it, ask your teacher or admin to reset it.</p>
+        </div>
+      </div>
+
+      <!-- UNIT 24: Creating & Saving Files -->
+      <div class="slide" data-unit="24">
+        <div class="slide-header">
+          <div class="slide-emoji">📄</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 24</div>
+            <div class="slide-title">Creating & Saving Files</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>How to create and save your first document</li><li>Save vs Save As</li><li>Common file types and where to save</li></ul>
+        </div>
+        <div class="slide-scroll">
+          <div class="cards-grid" style="margin-bottom:14px">
+            <div class="info-card">
+              <div class="card-icon">💾</div>
+              <div class="card-title">Save (Ctrl + S)</div>
+              <div class="card-text">Saves your work to the same file. Use it often so you don't lose work if the computer restarts or closes by mistake!</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">📋</div>
+              <div class="card-title">Save As</div>
+              <div class="card-text">Save a COPY with a new name or in a new folder. Use when you want to keep the original and create a new version.</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">📁</div>
+              <div class="card-title">Where to Save?</div>
+              <div class="card-text">Documents folder is good for school work. Desktop is easy to find. Never save only on the Desktop if the lab PC is shared — use your USB or cloud!</div>
+            </div>
+          </div>
+          <div class="wide-card">
+            <div class="card-title" style="margin-bottom:8px">📄 Common File Types</div>
+            <div class="tag-row">
+              <span class="tag">.docx — Word document</span>
+              <span class="tag green">.pdf — PDF (read-only)</span>
+              <span class="tag orange">.txt — Plain text</span>
+              <span class="tag purple">.xlsx — Excel spreadsheet</span>
+              <span class="tag red">.jpg / .png — Images</span>
+            </div>
+          </div>
+          <div class="tip-box" style="margin-top:12px">
+            <span class="tip-icon">💡</span>
+            <p>Get into the habit: type a little, then Ctrl+S. That way you never lose more than a few minutes of work!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 25: Computer Care & Safety -->
+      <div class="slide" data-unit="25">
+        <div class="slide-header">
+          <div class="slide-emoji">🧹</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 25</div>
+            <div class="slide-title">Computer Care & Safety</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>How to take care of hardware</li><li>Safe handling of cables and power</li><li>Cleaning and ventilation</li></ul>
+        </div>
+        <div class="cards-grid">
+          <div class="info-card">
+            <div class="card-icon">🖥️</div>
+            <div class="card-title">Keep It Cool</div>
+            <div class="card-text">Computers need air! Don't block the vents. Keep the room ventilated. Overheating can damage the CPU and cause shutdowns.</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🔌</div>
+            <div class="card-title">Cables & Power</div>
+            <div class="card-text">Don't pull cables by the wire. Unplug by holding the plug. Use a surge protector or UPS to protect from power spikes.</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🧹</div>
+            <div class="card-title">Cleaning</div>
+            <div class="card-text">Turn OFF before cleaning. Use a soft, dry cloth for screen and keyboard. No water or spray directly on the computer!</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🍵</div>
+            <div class="card-title">No Food or Drink</div>
+            <div class="card-text">Keep drinks and food away from the keyboard and PC. Spills can damage parts and cause short circuits!</div>
+          </div>
+        </div>
+        <div class="tip-box">
+          <span class="tip-icon">💡</span>
+          <p>Handle the mouse and keyboard gently. Banging or dropping can break them. Report any damage to your teacher immediately.</p>
+        </div>
+      </div>
+
+      <!-- UNIT 26: Basic Troubleshooting -->
+      <div class="slide" data-unit="26">
+        <div class="slide-header">
+          <div class="slide-emoji">🔧</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 26</div>
+            <div class="slide-title">Basic Troubleshooting</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>What to do when the computer is slow or frozen</li><li>When to restart and when to ask for help</li><li>Simple checks (cables, power)</li></ul>
+        </div>
+        <div class="slide-scroll">
+          <div class="steps-list" style="margin-bottom:14px">
+            <div class="step-item"><div class="step-num">1</div><div class="step-text">Computer frozen? Wait 10–20 seconds. If nothing happens, try Ctrl+Alt+Del → Task Manager → End the program that is "Not responding".</div></div>
+            <div class="step-item"><div class="step-num">2</div><div class="step-text">Still frozen? Restart: Start → Power → Restart. Do NOT hold the power button unless the screen is completely stuck for a long time.</div></div>
+            <div class="step-item"><div class="step-num">3</div><div class="step-text">No display? Check monitor is ON and cable is connected. Check CPU is ON (power light).</div></div>
+            <div class="step-item"><div class="step-num">4</div><div class="step-text">No internet? Check WiFi is ON (taskbar). Restart the router if you are at home. At school, tell the teacher.</div></div>
+          </div>
+          <div class="wide-card">
+            <div class="card-title" style="margin-bottom:8px">🐢 Computer Very Slow?</div>
+            <div class="card-text" style="font-size:13px; line-height:1.6">
+              • Close programs you are not using.<br>
+              • Restart the computer once a day in the lab.<br>
+              • Too many files on Desktop can slow things down — keep Desktop tidy.<br>
+              • Ask your teacher if the PC needs antivirus scan or cleanup.
+            </div>
+          </div>
+          <div class="warn-box" style="margin-top:12px">
+            <span class="tip-icon">⚠️</span>
+            <p>Do not open the CPU cabinet or try to fix hardware yourself. Report problems to your teacher or lab in-charge.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 27: Built-in Apps -->
+      <div class="slide" data-unit="27">
+        <div class="slide-header">
+          <div class="slide-emoji">📱</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 27</div>
+            <div class="slide-title">Built-in Apps (Notepad, Calculator, Paint)</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>Use Notepad, Calculator, Paint, Snipping Tool</li><li>When to use each app</li></ul>
+        </div>
+        <div class="cards-grid">
+          <div class="info-card">
+            <div class="card-icon">📝</div>
+            <div class="card-title">Notepad</div>
+            <div class="card-text">Simple text editor — no formatting. Start → Notepad. Good for quick notes, .txt files. Save as .txt.</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🔢</div>
+            <div class="card-title">Calculator</div>
+            <div class="card-text">Start → Calculator. Basic, scientific, and programmer modes. Use for maths without a physical calculator!</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">🎨</div>
+            <div class="card-title">Paint</div>
+            <div class="card-text">Draw and edit pictures. Start → Paint. Use brushes, shapes, text. Save as .png or .jpg. Fun for simple graphics!</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">✂️</div>
+            <div class="card-title">Snipping Tool / Snip & Sketch</div>
+            <div class="card-text">Capture a screenshot of part of the screen. Win+Shift+S to open. Select area → it copies to clipboard. Paste in Word or Paint!</div>
+          </div>
+        </div>
+        <div class="tip-box">
+          <span class="tip-icon">💡</span>
+          <p>These apps come free with Windows. You don't need to install anything. Great for practice before using Word or Excel!</p>
+        </div>
+      </div>
+
+      <!-- UNIT 28: Digital Citizenship & Ethics -->
+      <div class="slide" data-unit="28">
+        <div class="slide-header">
+          <div class="slide-emoji">🤝</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 28</div>
+            <div class="slide-title">Digital Citizenship & Ethics</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>Netiquette — being kind online</li><li>Privacy and sharing</li><li>Copyright and fair use</li></ul>
+        </div>
+        <div class="slide-scroll">
+          <div class="cards-grid" style="margin-bottom:14px">
+            <div class="info-card">
+              <div class="card-icon">🙂</div>
+              <div class="card-title">Netiquette</div>
+              <div class="card-text">Be polite and respectful online. Don't type in ALL CAPS (it looks like shouting). Don't spread rumours or say mean things. Think before you post!</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">🔒</div>
+              <div class="card-title">Privacy</div>
+              <div class="card-text">Don't share your full name, address, phone, or school with strangers. Don't post photos of others without permission. Protect your personal information!</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">📜</div>
+              <div class="card-title">Copyright</div>
+              <div class="card-text">Don't copy someone else's text, images, or videos and say it's yours. Use only with permission or for school projects with proper credit.</div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon">🛑</div>
+              <div class="card-title">Cyberbullying</div>
+              <div class="card-text">Bullying online is wrong. Don't do it. If someone bullies you, don't reply — save evidence and tell a trusted adult.</div>
+            </div>
+          </div>
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <p>Being a good digital citizen means using technology responsibly, safely, and kindly. You represent yourself and your school online!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 29: Backup Basics -->
+      <div class="slide" data-unit="29">
+        <div class="slide-header">
+          <div class="slide-emoji">💾</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 29</div>
+            <div class="slide-title">Backup Basics</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">In this unit you will learn:</span>
+          <ul><li>Why backup is important</li><li>Ways to backup: USB, cloud</li><li>Simple backup habits</li></ul>
+        </div>
+        <div class="cards-grid">
+          <div class="info-card">
+            <div class="card-icon">🔄</div>
+            <div class="card-title">Why Backup?</div>
+            <div class="card-text">Computers can crash, get viruses, or be lost. If you have a copy of your important files elsewhere, you don't lose them!</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">💾</div>
+            <div class="card-title">USB / Pen Drive</div>
+            <div class="card-text">Copy your important folders (Documents, projects) to a pen drive regularly. Keep the pen drive in a safe place. Don't lose it!</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">☁️</div>
+            <div class="card-title">Cloud Backup</div>
+            <div class="card-text">Google Drive, OneDrive, or Dropbox save files on the internet. You can access them from any device. Good for school work!</div>
+          </div>
+          <div class="info-card">
+            <div class="card-icon">📅</div>
+            <div class="card-title">Good Habit</div>
+            <div class="card-text">Save your work often (Ctrl+S). At the end of the day or week, copy important files to USB or cloud. "3-2-1" rule: 3 copies, 2 different types, 1 off-site (e.g. cloud).</div>
+          </div>
+        </div>
+        <div class="tip-box">
+          <span class="tip-icon">💡</span>
+          <p>In a school lab, never rely only on the PC. Take your files home on a pen drive or upload to Google Drive so you have a copy!</p>
+        </div>
+      </div>
+
+      <!-- UNIT 30: Exam -->
+      <div class="slide" data-unit="30">
+        <div class="slide-header">
+          <div class="slide-emoji">📝</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 30</div>
+            <div class="slide-title">ICT Course Exam</div>
+          </div>
+        </div>
+        <div class="unit-objectives">
+          <span class="obj-label">Ready to test your knowledge?</span>
+          <ul><li>30 multiple-choice questions</li><li>Pass with 75% or more to get your certificate</li><li>One attempt per session — answer carefully!</li></ul>
+        </div>
+        <div class="slide-scroll" style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1;">
+          <div class="wide-card" style="max-width:480px; text-align:center; padding:40px;">
+            <div class="card-icon" style="font-size:64px; margin-bottom:20px;">📋</div>
+            <div class="card-title" style="font-size:22px; margin-bottom:12px;">Take Your ICT Assessment</div>
+            <div class="card-text" style="font-size:15px; margin-bottom:28px;">Complete the exam to earn your Certificate of Completion. Enter your name and answer all 30 questions.</div>
+            <button type="button" class="nav-btn" onclick="window.location.href='assignment.html';" style="margin:0;">
+              Start Exam →
+            </button>
           </div>
         </div>
       </div>
@@ -1223,6 +1689,17 @@
     {icon:'💾', label:'Storage'},
     {icon:'🌐', label:'Internet Browsing'},
     {icon:'📡', label:'Networking Basics'},
+    {icon:'🔌', label:'Starting & Shutting Down'},
+    {icon:'🪟', label:'What is an Operating System?'},
+    {icon:'⚙️', label:'Windows Settings (Modern)'},
+    {icon:'👤', label:'User Accounts & Passwords'},
+    {icon:'📄', label:'Creating & Saving Files'},
+    {icon:'🧹', label:'Computer Care & Safety'},
+    {icon:'🔧', label:'Basic Troubleshooting'},
+    {icon:'📱', label:'Built-in Apps (Notepad, Calculator, Paint)'},
+    {icon:'🤝', label:'Digital Citizenship & Ethics'},
+    {icon:'💾', label:'Backup Basics'},
+    {icon:'📝', label:'Exam'},
   ];
 
   let current = 0;
