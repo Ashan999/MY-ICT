@@ -1227,14 +1227,18 @@
 
   function generatePDF() {
     const certificateElement = document.getElementById('certificate');
-    if (!certificateElement) {
+    const containerElement = document.getElementById('certificateScreen').querySelector('.certificate-container');
+    if (!certificateElement || !containerElement) {
       alert('Certificate not found. Please try again.');
       return;
     }
 
-    // temporarily fix width to prevent mobile squashing during capture
-    const originalWidth = certificateElement.style.width;
-    certificateElement.style.width = '1000px';
+    // temporarily force a desktop width on the container to stop mobile squashing
+    const originalContainerWidth = containerElement.style.width;
+    containerElement.style.width = '1050px';
+    // also ensure the inner certificate matches (optional but safe)
+    const originalCertWidth = certificateElement.style.width;
+    certificateElement.style.width = '1050px';
 
     // Show loading state
     const downloadBtn = document.querySelector('.download-btn');
@@ -1249,14 +1253,16 @@
       backgroundColor: null,
       width: certificateElement.offsetWidth,
       height: certificateElement.offsetHeight,
-      windowWidth: certificateElement.scrollWidth,
+      windowWidth: 1050,
       windowHeight: certificateElement.scrollHeight,
       allowTaint: false,
+      scrollX: 0,
+      scrollY: 0,
       windowScrollY: 0
     }).then(function(canvas) {
       try {
         const { jsPDF } = window.jspdf;
-        // Use pixel dimensions from canvas to avoid white borders
+        // match canvas size exactly to avoid footer cuts
         const pdf = new jsPDF({
           orientation: 'landscape',
           unit: 'px',
@@ -1264,7 +1270,6 @@
         });
 
         const imgData = canvas.toDataURL('image/png', 1.0);
-        // directly fill entire page
         pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height, undefined, 'FAST');
         const fileName = 'ICT_Certificate_' + (studentName.replace(/\s+/g, '_')) + '.pdf';
         pdf.save(fileName);
@@ -1276,8 +1281,9 @@
       console.error('Error capturing certificate:', error);
       alert('Error capturing certificate. Please try again.');
     }).finally(function() {
-      // restore original width and button state
-      certificateElement.style.width = originalWidth;
+      // restore original widths and button state
+      containerElement.style.width = originalContainerWidth;
+      certificateElement.style.width = originalCertWidth;
       downloadBtn.disabled = false;
       downloadBtn.textContent = originalText;
     });
