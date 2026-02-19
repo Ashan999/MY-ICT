@@ -602,15 +602,121 @@
   }
 
   @media (max-width: 768px) {
+    body { padding: 10px; }
+    .container { border-radius: 12px; }
+    
+    /* Quiz screen mobile */
+    #quizScreen {
+      padding: 16px 12px;
+    }
+    .quiz-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+    }
+    .quiz-header h2 {
+      font-size: 20px;
+      width: 100%;
+    }
+    .score-display {
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      width: 100%;
+    }
+    .engineer-pwd-btn {
+      top: 12px;
+      right: 12px;
+      font-size: 11px;
+      padding: 6px 10px;
+    }
+    .question-card {
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .question-text {
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    .option {
+      padding: 12px 14px;
+      font-size: 14px;
+      min-height: 48px;
+    }
+    .submit-section {
+      margin-top: 30px;
+      padding-top: 20px;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 16px;
+    }
+    
+    /* Results screen mobile */
+    #resultsScreen {
+      padding: 40px 20px;
+    }
+    .result-icon {
+      font-size: 60px;
+    }
+    .result-title {
+      font-size: 24px;
+    }
+    .result-score {
+      font-size: 36px;
+    }
+    .result-stats {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .stat-box {
+      width: 100%;
+    }
+    .certificate-btn {
+      width: 100%;
+      padding: 14px 24px;
+    }
+    
+    /* Certificate screen mobile */
+    #certificateScreen {
+      padding: 10px;
+    }
+    .certificate-container {
+      max-width: 100%;
+      border-radius: 8px;
+    }
     .certificate {
       width: 100%;
       height: auto;
       min-height: 500px;
-      padding: 20px;
+      padding: 20px 15px;
+      transform: scale(0.95);
+      transform-origin: top center;
     }
-    .cert-title { font-size: 32px; }
-    .cert-name { font-size: 28px; }
-    .cert-body { font-size: 18px; }
+    .cert-title { font-size: 28px; letter-spacing: 3px; margin: 15px 0 20px 0; }
+    .cert-name { font-size: 24px; margin: 6px 0 16px 0; }
+    .cert-body { font-size: 16px; margin: 0 0 6px 0; }
+    .cert-course { font-size: 20px; margin: 10px 0 12px 0; }
+    .cert-body-2 { font-size: 16px; margin: 0 0 6px 0; }
+    .cert-instructor { font-size: 17px; margin: 12px 0 0 0; }
+    .cert-details { font-size: 14px; margin-top: 24px; line-height: 1.8; }
+    .cert-id { font-size: 11px; margin-top: 18px; }
+    .cert-footer { font-size: 10px; margin-top: 20px; }
+    .cert-actions {
+      padding: 15px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .download-btn, .back-btn {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 16px;
+    }
   }
 </style>
 </head>
@@ -863,54 +969,95 @@
   let wrongCount = 0;
   let engineerModeActive = false;
 
-  // Enable start button when name is entered
-  document.getElementById('studentName').addEventListener('input', function(e) {
-    const btn = document.querySelector('.start-test-btn');
-    btn.disabled = e.target.value.trim().length === 0;
-  });
+  // Wait for DOM to be ready
+  document.addEventListener('DOMContentLoaded', function() {
+    // Enable start button when name is entered
+    const nameInput = document.getElementById('studentName');
+    const startBtn = document.querySelector('.start-test-btn');
+    
+    if (nameInput && startBtn) {
+      nameInput.addEventListener('input', function(e) {
+        startBtn.disabled = e.target.value.trim().length === 0;
+      });
 
-  // Allow Enter key to start test
-  document.getElementById('studentName').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && !this.value.trim() === '') {
-      startTest();
+      // Allow Enter key to start test
+      nameInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && this.value.trim().length > 0) {
+          e.preventDefault();
+          startTest();
+        }
+      });
     }
   });
 
   function startTest() {
-    studentName = document.getElementById('studentName').value.trim();
-    if (!studentName) {
-      alert('Please enter your name');
-      return;
+    try {
+      studentName = document.getElementById('studentName').value.trim();
+      if (!studentName) {
+        alert('Please enter your name');
+        return;
+      }
+      
+      const nameScreen = document.getElementById('nameScreen');
+      const quizScreen = document.getElementById('quizScreen');
+      
+      if (!nameScreen || !quizScreen) {
+        alert('Error: Page elements not found. Please refresh the page.');
+        return;
+      }
+      
+      nameScreen.style.display = 'none';
+      quizScreen.classList.add('active');
+      
+      renderQuestions();
+    } catch (error) {
+      console.error('Error starting test:', error);
+      alert('An error occurred. Please refresh the page and try again.');
     }
-    
-    document.getElementById('nameScreen').style.display = 'none';
-    document.getElementById('quizScreen').classList.add('active');
-    
-    renderQuestions();
   }
 
   function renderQuestions() {
-    const container = document.getElementById('questionsContainer');
-    container.innerHTML = '';
-    
-    questions.forEach((question, index) => {
-      const qDiv = document.createElement('div');
-      qDiv.className = 'question-card';
-      qDiv.innerHTML = `
-        <div class="question-number">Question ${index + 1} of 30</div>
-        <div class="question-text">${question.q}</div>
-        <div class="options-list" id="options-${index}">
-          ${question.options.map((opt, optIdx) => `
-            <div class="option" onclick="selectAnswer(${index}, ${optIdx})" data-option="${optIdx}">
-              <div class="option-radio"></div>
-              <span>${opt}</span>
-              <span class="feedback-icon"></span>
-            </div>
-          `).join('')}
-        </div>
-      `;
-      container.appendChild(qDiv);
-    });
+    try {
+      const container = document.getElementById('questionsContainer');
+      if (!container) {
+        alert('Error: Questions container not found.');
+        return;
+      }
+      
+      container.innerHTML = '';
+      
+      if (!questions || questions.length === 0) {
+        alert('Error: No questions found.');
+        return;
+      }
+      
+      questions.forEach((question, index) => {
+        const qDiv = document.createElement('div');
+        qDiv.className = 'question-card';
+        const questionHtml = '<div class="question-number">Question ' + (index + 1) + ' of 30</div>' +
+          '<div class="question-text">' + escapeHtml(question.q) + '</div>' +
+          '<div class="options-list" id="options-' + index + '">' +
+          question.options.map(function(opt, optIdx) {
+            return '<div class="option" onclick="selectAnswer(' + index + ', ' + optIdx + ')" data-option="' + optIdx + '">' +
+              '<div class="option-radio"></div>' +
+              '<span>' + escapeHtml(opt) + '</span>' +
+              '<span class="feedback-icon"></span>' +
+              '</div>';
+          }).join('') +
+          '</div>';
+        qDiv.innerHTML = questionHtml;
+        container.appendChild(qDiv);
+      });
+    } catch (error) {
+      console.error('Error rendering questions:', error);
+      alert('Error loading questions. Please refresh the page.');
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   function selectAnswer(qIndex, optIndex) {
@@ -1066,6 +1213,7 @@
   }
 
   function downloadCertificate() {
+    // Simple print function - works on all devices
     window.print();
   }
 
