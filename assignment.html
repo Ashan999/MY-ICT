@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ICT Course Assessment - Assignment</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root {
     --blue: #2563EB;
@@ -367,6 +369,8 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   .certificate {
@@ -387,6 +391,7 @@
     overflow: hidden;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    background-color: #0F172A;
   }
 
   /* Gold border */
@@ -577,6 +582,8 @@
     .certificate-container {
       box-shadow: none !important;
       max-width: none !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
     .certificate {
       width: 297mm !important;
@@ -800,7 +807,7 @@
         </div>
       </div>
       <div class="cert-actions">
-        <button class="download-btn" onclick="downloadCertificate()">Download PDF</button>
+        <button class="download-btn" onclick="downloadCertificatePDF()">Download PDF</button>
         <button class="back-btn" onclick="backToResults()">Back to Results</button>
       </div>
     </div>
@@ -1212,9 +1219,90 @@
     document.getElementById('certId').textContent = 'Certificate ID: ' + certId;
   }
 
-  function downloadCertificate() {
-    // Simple print function - works on all devices
-    window.print();
+  function downloadCertificatePDF() {
+    const certificateElement = document.getElementById('certificate');
+    if (!certificateElement) {
+      alert('Certificate not found. Please try again.');
+      return;
+    }
+
+    // Show loading state
+    const downloadBtn = document.querySelector('.download-btn');
+    const originalText = downloadBtn.textContent;
+    downloadBtn.disabled = true;
+    downloadBtn.textContent = 'Generating PDF...';
+
+    // Use html2canvas to capture the certificate
+    html2canvas(certificateElement, {
+      scale: 3,
+      useCORS: true,
+      logging: false,
+      backgroundColor: null,
+      width: certificateElement.offsetWidth,
+      height: certificateElement.offsetHeight,
+      windowWidth: certificateElement.scrollWidth,
+      windowHeight: certificateElement.scrollHeight,
+      allowTaint: false
+    }).then(function(canvas) {
+      try {
+        // A4 landscape dimensions: 297mm x 210mm
+        const pdfWidth = 297;
+        const pdfHeight = 210;
+        
+        // Create PDF in landscape orientation
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: [pdfWidth, pdfHeight]
+        });
+
+        // Convert canvas to image
+        const imgData = canvas.toDataURL('image/png', 1.0);
+        
+        // Calculate aspect ratio to fit image properly
+        const imgAspectRatio = canvas.width / canvas.height;
+        const pdfAspectRatio = pdfWidth / pdfHeight;
+        
+        let finalWidth = pdfWidth;
+        let finalHeight = pdfHeight;
+        let xOffset = 0;
+        let yOffset = 0;
+        
+        if (imgAspectRatio > pdfAspectRatio) {
+          // Image is wider - fit to width
+          finalHeight = pdfWidth / imgAspectRatio;
+          yOffset = (pdfHeight - finalHeight) / 2;
+        } else {
+          // Image is taller - fit to height
+          finalWidth = pdfHeight * imgAspectRatio;
+          xOffset = (pdfWidth - finalWidth) / 2;
+        }
+        
+        // Add image to PDF (centered and fitted)
+        pdf.addImage(imgData, 'PNG', xOffset, yOffset, finalWidth, finalHeight, undefined, 'FAST');
+        
+        // Generate filename with student name
+        const fileName = 'ICT_Certificate_' + (studentName.replace(/\s+/g, '_')) + '.pdf';
+        
+        // Save PDF
+        pdf.save(fileName);
+        
+        // Restore button state
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = originalText;
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+        alert('Error generating PDF. Please try again or use the print function.');
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = originalText;
+      }
+    }).catch(function(error) {
+      console.error('Error capturing certificate:', error);
+      alert('Error capturing certificate. Please try again.');
+      downloadBtn.disabled = false;
+      downloadBtn.textContent = originalText;
+    });
   }
 
   function backToResults() {
