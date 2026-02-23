@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 31 – MS Word & Google Docs | Advance IT</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2563EB;
+    --blue-light: #EFF6FF;
+    --blue-mid: #DBEAFE;
+    --teal: #0D9488;
+    --orange: #F97316;
+    --yellow: #FBBF24;
+    --green: #22C55E;
+    --purple: #7C3AED;
+    --pink: #EC4899;
+    --red: #EF4444;
+    --bg: #F0F7FF;
+    --white: #FFFFFF;
+    --text: #1E293B;
+    --text-soft: #64748B;
+    --card: #FFFFFF;
+    --radius: 20px;
+    --shadow: 0 8px 32px rgba(37,99,235,0.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── SPLASH ── */
+  #splash {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #2563EB 0%, #0D9488 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  #splash.hide { opacity: 0; pointer-events: none; transform: scale(1.05); }
+  .splash-icon { font-size: 90px; animation: bounce-in 0.8s cubic-bezier(.36,.07,.19,.97) both; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.2)); }
+  .splash-badge {
+    background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+    color: white; font-size: 13px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; padding: 6px 20px; border-radius: 50px;
+    margin-top: 20px; animation: fade-up 0.6s 0.2s both;
+  }
+  .splash-title {
+    font-family: 'Baloo 2', cursive;
+    font-size: 44px; font-weight: 800; color: white;
+    margin-top: 10px; text-align: center; line-height: 1.2;
+    animation: fade-up 0.8s 0.3s both;
+  }
+  .splash-sub { font-size: 17px; color: rgba(255,255,255,0.85); margin-top: 8px; animation: fade-up 0.8s 0.5s both; }
+  .splash-hours {
+    display: flex; gap: 16px; margin-top: 24px;
+    animation: fade-up 0.8s 0.55s both;
+  }
+  .splash-hour-chip {
+    background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35);
+    color: white; padding: 8px 18px; border-radius: 40px;
+    font-size: 13px; font-weight: 700;
+  }
+  .start-btn {
+    margin-top: 32px;
+    background: white; color: var(--blue);
+    font-family: 'Baloo 2', cursive;
+    font-size: 22px; font-weight: 700;
+    padding: 14px 48px; border-radius: 50px;
+    border: none; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    animation: fade-up 0.8s 0.7s both;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .start-btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+
+  /* ── APP LAYOUT ── */
+  #app { display: none; height: 100vh; flex-direction: column; }
+  #app.visible { display: flex; }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex; align-items: center; gap: 12px;
+    background: white; padding: 10px 24px;
+    box-shadow: 0 2px 12px rgba(37,99,235,0.08); z-index: 10;
+    flex-wrap: wrap;
+  }
+  .topbar-logo { font-family: 'Baloo 2', cursive; font-size: 20px; font-weight: 800; color: var(--blue); }
+  .topbar-sep { color: #CBD5E1; font-size: 18px; }
+  .topbar-unit-name { font-family: 'Baloo 2', cursive; font-size: 16px; font-weight: 700; color: var(--text); }
+  .topbar-label { margin-left: auto; font-size: 13px; color: var(--text-soft); font-weight: 700; white-space: nowrap; }
+  .progress-wrap { flex-basis: 200px; background: #E2E8F0; border-radius: 20px; height: 10px; overflow: hidden; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--blue), var(--teal)); border-radius: 20px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+  .download-btn {
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: white; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
+    padding: 8px 18px; border-radius: 30px; border: none; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .download-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,99,235,0.4); }
+
+  /* ── MAIN ── */
+  .main-area { display: flex; flex: 1; overflow: hidden; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 230px; background: white;
+    border-right: 2px solid #E2E8F0;
+    overflow-y: auto; padding: 12px 8px;
+    display: flex; flex-direction: column; gap: 4px;
+    flex-shrink: 0;
+  }
+  .sidebar-section-title {
+    font-size: 10px; font-weight: 800; color: var(--text-soft);
+    text-transform: uppercase; letter-spacing: 1.2px;
+    padding: 8px 12px 4px;
+  }
+  .hour-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 12px;
+    border: none; background: transparent;
+    font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700;
+    color: var(--text-soft); cursor: pointer; text-align: left; width: 100%;
+    transition: all 0.2s;
+  }
+  .hour-btn:hover { background: var(--blue-light); color: var(--blue); }
+  .hour-btn.active { background: linear-gradient(90deg, #2563EB, #0D9488); color: white; box-shadow: 0 4px 12px rgba(37,99,235,0.25); }
+  .hour-btn .h-icon { font-size: 20px; flex-shrink: 0; }
+  .hour-btn .h-label { line-height: 1.3; }
+  .hour-badge {
+    margin-left: auto; font-size: 10px; font-weight: 800;
+    background: rgba(0,0,0,0.08); padding: 2px 7px; border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .hour-btn.active .hour-badge { background: rgba(255,255,255,0.25); }
+
+  /* ── SLIDE AREA ── */
+  .slide-area { flex: 1; overflow: hidden; padding: 20px 24px; display: flex; flex-direction: column; }
+  .slide { display: none; flex-direction: column; height: 100%; animation: slide-in 0.45s cubic-bezier(.4,0,.2,1) both; }
+  .slide.active { display: flex; }
+
+  /* SLIDE HEADER */
+  .slide-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-shrink: 0; }
+  .slide-emoji {
+    font-size: 48px; background: white; border-radius: 18px;
+    width: 72px; height: 72px; display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow); flex-shrink: 0; animation: pop 0.5s 0.2s both;
+  }
+  .slide-num { font-size: 11px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
+  .slide-title { font-family: 'Baloo 2', cursive; font-size: 26px; font-weight: 800; color: var(--text); line-height: 1.2; }
+  .slide-goal {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--blue-mid); color: var(--blue);
+    font-size: 12px; font-weight: 800; padding: 4px 14px;
+    border-radius: 30px; margin-top: 4px;
+  }
+
+  /* SCROLLABLE CONTENT */
+  .slide-scroll { flex: 1; overflow-y: auto; padding-right: 4px; }
+  .slide-scroll::-webkit-scrollbar { width: 5px; }
+  .slide-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+
+  /* CARDS GRID */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px; margin-bottom: 16px;
+  }
+  .info-card {
+    background: white; border-radius: var(--radius); padding: 18px;
+    box-shadow: var(--shadow); border-left: 4px solid var(--blue);
+    animation: fade-up 0.5s both; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .info-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(37,99,235,0.15); }
+  .info-card.teal { border-color: var(--teal); }
+  .info-card.orange { border-color: var(--orange); }
+  .info-card.purple { border-color: var(--purple); }
+  .info-card.green { border-color: var(--green); }
+  .info-card.pink { border-color: var(--pink); }
+  .info-card.yellow { border-color: var(--yellow); }
+  .card-icon { font-size: 28px; margin-bottom: 8px; }
+  .card-title { font-weight: 800; font-size: 14px; margin-bottom: 6px; color: var(--text); }
+  .card-text { font-size: 13px; color: var(--text-soft); line-height: 1.6; }
+
+  /* WIDE CARD */
+  .wide-card {
+    background: white; border-radius: var(--radius); padding: 20px 24px;
+    box-shadow: var(--shadow); margin-bottom: 14px; border-left: 4px solid var(--blue);
+    animation: fade-up 0.5s both;
+  }
+  .wide-card-title { font-weight: 800; font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+
+  /* TIP BOX */
+  .tip-box {
+    background: linear-gradient(135deg, #EFF6FF, #F0FDFA);
+    border: 2px solid #BFDBFE; border-radius: 16px;
+    padding: 14px 18px; display: flex; gap: 12px; align-items: flex-start;
+    margin-bottom: 14px; animation: fade-up 0.5s 0.3s both;
+  }
+  .tip-icon { font-size: 22px; flex-shrink: 0; }
+  .tip-box p { font-size: 13px; color: var(--text); line-height: 1.6; font-weight: 600; }
+
+  /* SHORTCUT BADGE */
+  .shortcut { display: inline-block; background: #1E293B; color: #F8FAFC; font-family: 'Courier New', monospace; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 6px; margin: 2px 3px; box-shadow: 0 2px 0 #475569; }
+  .shortcuts-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+  /* BEFORE/AFTER */
+  .before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .ba-card { background: white; border-radius: 14px; padding: 16px; box-shadow: var(--shadow); animation: fade-up 0.5s 0.2s both; }
+  .ba-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .ba-label.before { color: var(--red); }
+  .ba-label.after { color: var(--green); }
+  .ba-text { font-size: 13px; line-height: 1.7; color: var(--text-soft); }
+  .ba-text.after-text { font-weight: 700; color: var(--text); }
+
+  /* TABLE */
+  .content-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; background: white; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); animation: fade-up 0.5s 0.2s both; }
+  .content-table th { background: linear-gradient(90deg, var(--blue), var(--teal)); color: white; padding: 10px 14px; text-align: left; font-weight: 800; }
+  .content-table td { padding: 9px 14px; border-bottom: 1px solid #F1F5F9; }
+  .content-table tr:last-child td { border-bottom: none; }
+  .content-table tr:hover td { background: var(--blue-light); }
+
+  /* GRID VISUAL */
+  .excel-grid { display: inline-grid; grid-template-columns: 50px repeat(3, 80px); gap: 0; border: 2px solid #2563EB; border-radius: 10px; overflow: hidden; margin: 10px 0; box-shadow: var(--shadow); }
+  .excel-cell { padding: 8px 10px; font-size: 12px; font-weight: 700; text-align: center; border: 1px solid #DBEAFE; }
+  .excel-header { background: linear-gradient(135deg, var(--blue), var(--teal)); color: white; }
+  .excel-row-header { background: #EFF6FF; color: var(--blue); font-weight: 800; }
+  .excel-data { background: white; color: var(--text); }
+
+  /* SECTION DIVIDER */
+  .section-label {
+    font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--blue); padding: 4px 0 10px; border-bottom: 2px dashed #DBEAFE; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 2px; border-top: 2px dashed #DBEAFE; }
+
+  /* PRACTICE CARD */
+  .practice-card {
+    background: linear-gradient(135deg, #F0FDF4, #ECFDF5);
+    border: 2px solid #86EFAC; border-radius: 16px; padding: 18px 20px;
+    margin-bottom: 14px; animation: fade-up 0.5s 0.35s both;
+  }
+  .practice-title { font-weight: 800; font-size: 14px; color: #16A34A; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .practice-steps { list-style: none; padding: 0; }
+  .practice-steps li { font-size: 13px; color: var(--text); padding: 5px 0; display: flex; gap: 8px; align-items: flex-start; }
+  .practice-steps li::before { content: '→'; color: var(--green); font-weight: 800; flex-shrink: 0; }
+
+  /* FINAL PROJECT CARD */
+  .project-card {
+    background: linear-gradient(135deg, #EEF2FF, #FAF5FF);
+    border: 2px solid #C4B5FD; border-radius: 20px; padding: 24px;
+    text-align: center; animation: fade-up 0.5s 0.3s both; margin-bottom: 14px;
+  }
+  .project-icon { font-size: 56px; margin-bottom: 12px; }
+  .project-title { font-family: 'Baloo 2', cursive; font-size: 22px; font-weight: 800; color: var(--purple); margin-bottom: 8px; }
+  .project-desc { font-size: 14px; color: var(--text-soft); line-height: 1.7; margin-bottom: 18px; }
+  .project-checklist { list-style: none; text-align: left; display: inline-block; margin-bottom: 18px; }
+  .project-checklist li { font-size: 13px; color: var(--text); padding: 4px 0; display: flex; gap: 8px; }
+  .project-checklist li::before { content: '☐'; font-size: 15px; color: var(--purple); }
+  .submit-btn {
+    display: inline-block; background: linear-gradient(135deg, var(--purple), var(--pink));
+    color: white; font-family: 'Baloo 2', cursive; font-weight: 700; font-size: 16px;
+    padding: 12px 36px; border-radius: 40px; border: none; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(124,58,237,0.3); transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(124,58,237,0.4); }
+
+  /* COMPARISON TABLE */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; box-shadow: var(--shadow); border-radius: 14px; overflow: hidden; animation: fade-up 0.5s 0.25s both; }
+  .compare-table th { padding: 11px 16px; text-align: left; font-weight: 800; }
+  .compare-table th:nth-child(1) { background: #F1F5F9; color: var(--text-soft); }
+  .compare-table th:nth-child(2) { background: #1D4ED8; color: white; }
+  .compare-table th:nth-child(3) { background: #0F766E; color: white; }
+  .compare-table td { padding: 9px 16px; border-bottom: 1px solid #F1F5F9; background: white; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child { font-weight: 700; color: var(--text-soft); }
+
+  /* UNIT OVERVIEW CARD */
+  .unit-overview {
+    background: white; border-radius: var(--radius); padding: 20px 24px;
+    box-shadow: var(--shadow); margin-bottom: 18px; flex-shrink: 0;
+    border-top: 4px solid var(--blue); animation: fade-up 0.4s both;
+  }
+  .unit-overview-title { font-size: 12px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .hours-track { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hour-chip {
+    display: flex; align-items: center; gap: 7px; padding: 8px 14px;
+    border-radius: 30px; font-size: 12px; font-weight: 700; cursor: pointer;
+    border: 2px solid transparent; transition: all 0.2s;
+  }
+  .hour-chip.h1 { background: #EFF6FF; color: var(--blue); border-color: #BFDBFE; }
+  .hour-chip.h2 { background: #F0FDFA; color: var(--teal); border-color: #99F6E4; }
+  .hour-chip.h3 { background: #FFF7ED; color: var(--orange); border-color: #FED7AA; }
+  .hour-chip.h4 { background: #FAF5FF; color: var(--purple); border-color: #DDD6FE; }
+  .hour-chip:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+  /* NAV BAR */
+  .nav-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: white; padding: 12px 24px;
+    box-shadow: 0 -2px 12px rgba(37,99,235,0.08);
+  }
+  .nav-btn {
+    background: linear-gradient(90deg, var(--blue), var(--teal));
+    color: white; font-family: 'Baloo 2', cursive; font-weight: 700;
+    font-size: 16px; padding: 10px 28px; border-radius: 30px; border: none;
+    cursor: pointer; box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  }
+  .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .nav-btn:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,99,235,0.4); }
+  .slide-counter { font-family: 'Baloo 2', cursive; font-size: 16px; font-weight: 700; color: var(--text-soft); }
+
+  /* ANIMATIONS */
+  @keyframes bounce-in { 0%{transform:scale(0) rotate(-10deg)}70%{transform:scale(1.15) rotate(5deg)}100%{transform:scale(1) rotate(0)} }
+  @keyframes fade-up { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+  @keyframes slide-in { from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)} }
+  @keyframes pop { 0%{transform:scale(0)}80%{transform:scale(1.1)}100%{transform:scale(1)} }
+
+  /* RESPONSIVE */
+  @media(max-width:640px) {
+    .sidebar { display: none; }
+    .topbar-unit-name { display: none; }
+    .progress-wrap { flex-basis: 100px; }
+    .before-after { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-icon">📄</div>
+  <div class="splash-badge">Unit 31 · Advance IT</div>
+  <div class="splash-title">MS Word &<br>Google Docs</div>
+  <div class="splash-sub">Master the most essential office software</div>
+  <div class="splash-hours">
+    <div class="splash-hour-chip">⏱️ 4 Hours</div>
+    <div class="splash-hour-chip">🎯 4 Topics</div>
+    <div class="splash-hour-chip">🏆 Final Project</div>
+  </div>
+  <button class="start-btn" onclick="startUnit()">🚀 Start Learning</button>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-logo">🎓 Advance IT</div>
+    <div class="topbar-sep">›</div>
+    <div class="topbar-unit-name">Unit 31 – MS Word & Google Docs</div>
+    <div class="topbar-label" id="topbar-label">Hour 1 of 5</div>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progress" style="width:20%"></div>
+    </div>
+    <button class="download-btn" onclick="window.print()">⬇️ Download PDF</button>
+  </div>
+
+  <!-- MAIN AREA -->
+  <div class="main-area">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-section-title">Unit 31 – MS Word & Docs</div>
+
+      <button class="hour-btn active" onclick="goTo(0)">
+        <span class="h-icon">🗺️</span>
+        <span class="h-label">Overview</span>
+        <span class="hour-badge">Intro</span>
+      </button>
+      <button class="hour-btn" onclick="goTo(1)">
+        <span class="h-icon">🖥️</span>
+        <span class="h-label">Hour 1: Basics & Interface</span>
+        <span class="hour-badge">H1</span>
+      </button>
+      <button class="hour-btn" onclick="goTo(2)">
+        <span class="h-icon">🎨</span>
+        <span class="h-label">Hour 2: Formatting & Design</span>
+        <span class="hour-badge">H2</span>
+      </button>
+      <button class="hour-btn" onclick="goTo(3)">
+        <span class="h-icon">📐</span>
+        <span class="h-label">Hour 3: Structure & Visuals</span>
+        <span class="hour-badge">H3</span>
+      </button>
+      <button class="hour-btn" onclick="goTo(4)">
+        <span class="h-icon">✅</span>
+        <span class="h-label">Hour 4: Editing & Final Project</span>
+        <span class="hour-badge">H4</span>
+      </button>
+    </div>
+
+    <!-- SLIDE AREA -->
+    <div class="slide-area">
+
+      <!-- ─────────── SLIDE 0: OVERVIEW ─────────── -->
+      <div class="slide active" data-slide="0">
+        <div class="slide-header">
+          <div class="slide-emoji">📄</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Unit 31 · Advance IT</div>
+            <div class="slide-title">MS Word + Google Docs</div>
+          </div>
+        </div>
+        <div class="slide-scroll">
+          <div class="unit-overview">
+            <div class="unit-overview-title">📋 What You'll Cover</div>
+            <div class="hours-track">
+              <div class="hour-chip h1" onclick="goTo(1)">🖥️ H1 · Basics & Interface</div>
+              <div class="hour-chip h2" onclick="goTo(2)">🎨 H2 · Formatting & Design</div>
+              <div class="hour-chip h3" onclick="goTo(3)">📐 H3 · Structure & Visuals</div>
+              <div class="hour-chip h4" onclick="goTo(4)">✅ H4 · Editing & Final Project</div>
+            </div>
+          </div>
+          <div class="cards-grid">
+            <div class="info-card">
+              <div class="card-icon">🎯</div>
+              <div class="card-title">Why Learn This?</div>
+              <div class="card-text">Word processing is a core skill for school, work, and life. From writing letters to building CVs — mastering Word & Docs opens every door.</div>
+            </div>
+            <div class="info-card teal">
+              <div class="card-icon">⏱️</div>
+              <div class="card-title">Duration</div>
+              <div class="card-text">4 hours of structured learning. Each hour builds on the last. By Hour 4, you'll create a complete professional document from scratch!</div>
+            </div>
+            <div class="info-card orange">
+              <div class="card-icon">💻</div>
+              <div class="card-title">MS Word</div>
+              <div class="card-text">The world's most used word processor. Installed on Windows PCs. Powerful, precise, and industry-standard for most workplaces.</div>
+            </div>
+            <div class="info-card purple">
+              <div class="card-icon">🌐</div>
+              <div class="card-title">Google Docs</div>
+              <div class="card-text">Free, cloud-based, and works in any browser. Auto-saves everything. Perfect for collaboration and working from any device.</div>
+            </div>
+          </div>
+          <div class="section-label">Word vs Google Docs Quick Compare</div>
+          <table class="compare-table">
+            <thead>
+              <tr><th>Feature</th><th>📘 MS Word</th><th>🌐 Google Docs</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Cost</td><td>Paid (Microsoft 365)</td><td>Free with Google account</td></tr>
+              <tr><td>Works Offline</td><td>✅ Yes</td><td>⚠️ Limited (with setup)</td></tr>
+              <tr><td>Auto Save</td><td>Manual / OneDrive</td><td>✅ Always</td></tr>
+              <tr><td>Collaboration</td><td>Good (365)</td><td>✅ Excellent, real-time</td></tr>
+              <tr><td>File Format</td><td>.docx (industry standard)</td><td>.gdoc (exports to .docx)</td></tr>
+              <tr><td>Advanced Features</td><td>✅ More control</td><td>Simpler, easier to start</td></tr>
+            </tbody>
+          </table>
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <p>Both apps can open each other's files! Learn Word's layout and you'll find Docs easy — they share almost the same features. Click a chip above or use the buttons below to begin!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─────────── SLIDE 1: HOUR 1 ─────────── -->
+      <div class="slide" data-slide="1">
+        <div class="slide-header">
+          <div class="slide-emoji">🖥️</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Hour 1 · Unit 31</div>
+            <div class="slide-title">The Basics & Getting Comfortable</div>
+            <div class="slide-goal">🎯 Goal: Understand the interface and type a simple paragraph confidently</div>
+          </div>
+        </div>
+        <div class="slide-scroll">
+
+          <div class="section-label">The Word / Docs Interface</div>
+          <div class="cards-grid">
+            <div class="info-card">
+              <div class="card-icon">🔧</div>
+              <div class="card-title">The Ribbon (Top Menu)</div>
+              <div class="card-text">The toolbar across the top containing all commands. Organised into tabs: Home, Insert, Design, Layout, Review, View. Everything is here — no need to memorise menus!</div>
+            </div>
+            <div class="info-card teal">
+              <div class="card-icon">⚡</div>
+              <div class="card-title">Quick Access Toolbar</div>
+              <div class="card-text">The tiny toolbar above the Ribbon. Contains your most-used commands: Save, Undo, Redo. You can add more buttons by clicking the dropdown arrow ▾.</div>
+            </div>
+            <div class="info-card orange">
+              <div class="card-icon">📊</div>
+              <div class="card-title">Status Bar</div>
+              <div class="card-text">The strip at the very bottom of the window. Shows your current page, total pages, word count, and language. Right-click it to add/remove info.</div>
+            </div>
+            <div class="info-card purple">
+              <div class="card-icon">🏠</div>
+              <div class="card-title">Start Screen</div>
+              <div class="card-text"><strong>Blank Document</strong> — starts you fresh with an empty page. <strong>Templates</strong> — pre-designed layouts for CVs, Letters, Calendars, Invitations and more. Great starting point!</div>
+            </div>
+          </div>
+
+          <div class="section-label">Show/Hide ¶ Non-Printing Characters</div>
+          <div class="wide-card">
+            <div class="wide-card-title">🔍 What is Show/Hide ¶?</div>
+            <div class="card-text">Press <span class="shortcut">Ctrl + *</span> (or click ¶ in the Home tab) to reveal invisible characters: spaces appear as dots (·), paragraph breaks as ¶, and tab stops as arrows (→). This helps you see exactly how your document is structured and fix layout problems — a power-user secret!</div>
+          </div>
+
+          <div class="section-label">Text Basics</div>
+          <div class="cards-grid">
+            <div class="info-card green">
+              <div class="card-icon">⌨️</div>
+              <div class="card-title">Typing</div>
+              <div class="card-text">Click anywhere on the white page area and start typing. The blinking cursor shows where your text will appear. Use <strong>Enter</strong> for a new paragraph, <strong>Shift+Enter</strong> for a soft line break.</div>
+            </div>
+            <div class="info-card orange">
+              <div class="card-icon">⬅️</div>
+              <div class="card-title">Backspace vs Delete</div>
+              <div class="card-text"><strong>Backspace</strong> deletes the character to the LEFT of your cursor. <strong>Delete</strong> removes the character to the RIGHT. Use them together to edit text without retyping everything!</div>
+            </div>
+            <div class="info-card" style="border-color: var(--yellow); background: linear-gradient(135deg, #FFFBEB, #FEF9C3);">
+              <div class="card-icon">🥇</div>
+              <div class="card-title">Golden Rule</div>
+              <div class="card-text" style="font-weight:700; color: #92400E;">SELECT first, then CHANGE. Highlight text before applying any formatting. This applies to font, size, colour, bold — everything!</div>
+            </div>
+          </div>
+
+          <div class="section-label">Saving Your Work</div>
+          <div class="cards-grid">
+            <div class="info-card">
+              <div class="card-icon">💾</div>
+              <div class="card-title">Save vs Save As</div>
+              <div class="card-text"><strong>Save</strong> <span class="shortcut">Ctrl+S</span> — updates the current file instantly. <strong>Save As</strong> <span class="shortcut">F12</span> — lets you choose the filename, location, and file type. Always use Save As for a new document first to name it properly.</div>
+            </div>
+            <div class="info-card teal">
+              <div class="card-icon">📕</div>
+              <div class="card-title">Export as PDF</div>
+              <div class="card-text">Go to <strong>File → Export → Create PDF/XPS</strong>. PDFs cannot be easily edited and look identical on any device — perfect for printing or sharing professionally.</div>
+            </div>
+          </div>
+
+          <div class="section-label">Keyboard Shortcuts – Hour 1</div>
+          <div class="wide-card">
+            <div class="wide-card-title">⌨️ Essential Shortcuts</div>
+            <div class="shortcuts-wrap">
+              <span class="shortcut">Ctrl+S</span> Save
+              <span class="shortcut">F12</span> Save As
+              <span class="shortcut">Ctrl+Z</span> Undo
+              <span class="shortcut">Ctrl+Y</span> Redo
+              <span class="shortcut">Ctrl+*</span> Show/Hide ¶
+              <span class="shortcut">Ctrl+A</span> Select All
+              <span class="shortcut">Ctrl+P</span> Print
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">🖼️</span>
+            <p><strong>Screenshot Tip:</strong> The Ribbon looks like a strip of tabs across the top. Quick Access Toolbar is above it (top-left). Status bar is the grey strip at the very bottom. These three zones contain almost all tools you'll ever need!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─────────── SLIDE 2: HOUR 2 ─────────── -->
+      <div class="slide" data-slide="2">
+        <div class="slide-header">
+          <div class="slide-emoji">🎨</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Hour 2 · Unit 31</div>
+            <div class="slide-title">Formatting & Design</div>
+            <div class="slide-goal">🎯 Goal: Master the Home Tab — make text look professional</div>
+          </div>
+        </div>
+        <div class="slide-scroll">
+
+          <div class="section-label">Font Formatting</div>
+          <div class="cards-grid">
+            <div class="info-card">
+              <div class="card-icon">🔤</div>
+              <div class="card-title">Font Type & Size</div>
+              <div class="card-text">Select your text, then use the Font dropdown (e.g. Arial, Calibri) and the size box (e.g. 11, 12, 14, 24). <strong>Body text:</strong> 11–12pt. <strong>Headings:</strong> 16–24pt. <strong>Tip:</strong> Calibri 11 is the Word default.</div>
+            </div>
+            <div class="info-card teal">
+              <div class="card-icon">🖌️</div>
+              <div class="card-title">Font Colour</div>
+              <div class="card-text">Click the <strong>A</strong> with a colour bar in the Home tab. Click the dropdown arrow for a colour picker. Use dark colours for readability. Save bright colours for headings or highlights only.</div>
+            </div>
+            <div class="info-card orange">
+              <div class="card-icon"><strong>B I U</strong></div>
+              <div class="card-title">Bold, Italic, Underline</div>
+              <div class="card-text">
+                <span class="shortcut">Ctrl+B</span> Bold — for importance<br>
+                <span class="shortcut">Ctrl+I</span> Italic — for titles, emphasis<br>
+                <span class="shortcut">Ctrl+U</span> Underline — for links or key terms<br>
+                Select text first, then apply!
+              </div>
+            </div>
+          </div>
+
+          <div class="section-label">Paragraph Alignment</div>
+          <div class="cards-grid">
+            <div class="info-card">
+              <div class="card-icon">⬅️</div>
+              <div class="card-title">Left Align <span class="shortcut">Ctrl+L</span></div>
+              <div class="card-text">Default alignment. Text starts at the left margin. Best for normal body paragraphs in English.</div>
+            </div>
+            <div class="info-card teal">
+              <div class="card-icon">↔️</div>
+              <div class="card-title">Center <span class="shortcut">Ctrl+E</span></div>
+              <div class="card-text">Centers text horizontally. Perfect for titles, headings, and invitation text.</div>
+            </div>
+            <div class="info-card orange">
+              <div class="card-icon">➡️</div>
+              <div class="card-title">Right Align <span class="shortcut">Ctrl+R</span></div>
+              <div class="card-text">Text aligns to the right margin. Used for dates on letters, page numbers, or specific layouts.</div>
+            </div>
+            <div class="info-card purple">
+              <div class="card-icon">≡</div>
+              <div class="card-title">Justified <span class="shortcut">Ctrl+J</span></div>
+              <div class="card-text">Text spreads evenly between both margins — clean, even edges. Used in newspapers, books, and formal documents.</div>
+            </div>
+          </div>
+
+          <div class="section-label">Spacing & Lists</div>
+          <div class="cards-grid">
+            <div class="info-card green">
+              <div class="card-icon">↕️</div>
+              <div class="card-title">Line & Paragraph Spacing</div>
+              <div class="card-text">Home tab → Paragraph group → Line Spacing button. Common settings: 1.0 (tight), 1.15 (default), 1.5 (comfortable), 2.0 (double-spaced for essays). You can also add space Before/After paragraphs.</div>
+            </div>
+            <div class="info-card pink">
+              <div class="card-icon">• 1.</div>
+              <div class="card-title">Bullets & Numbering</div>
+              <div class="card-text">Click the bullet (•) or numbered list (1.) button in Home tab. Press <strong>Tab</strong> to create a nested sub-item (indented). Press <strong>Shift+Tab</strong> to move back out to the parent level.</div>
+            </div>
+          </div>
+
+          <div class="section-label">🪄 Format Painter — The Magic Tool</div>
+          <div class="wide-card" style="border-color: var(--orange); background: linear-gradient(135deg, #FFF7ED, #FFEDD5);">
+            <div class="wide-card-title" style="color: var(--orange);">🖌️ Format Painter</div>
+            <div class="card-text">
+              <strong>The most underused time-saving tool in Word!</strong><br><br>
+              1️⃣ Click on text that already has the formatting you want to copy<br>
+              2️⃣ Click the <strong>Format Painter</strong> brush icon in the Home tab (or press <span class="shortcut">Ctrl+Shift+C</span>)<br>
+              3️⃣ Drag over the text you want to give that same formatting<br><br>
+              <strong>💡 Double-click the brush</strong> to keep it active and paint multiple areas. Press <strong>Esc</strong> to stop.
+            </div>
+          </div>
+
+          <div class="section-label">Before & After — Formatting Example</div>
+          <div class="before-after">
+            <div class="ba-card">
+              <div class="ba-label before">❌ Before Formatting</div>
+              <div class="ba-text">this is my report on climate change climate change is a big problem in the world today many scientists are worried about the future</div>
+            </div>
+            <div class="ba-card">
+              <div class="ba-label after">✅ After Formatting</div>
+              <div class="ba-text after-text" style="font-size:15px; font-weight:800;">Climate Change Report</div>
+              <div class="ba-text" style="font-style:italic; margin-top:4px;">Climate change is a significant global challenge.</div>
+              <div class="ba-text" style="margin-top:6px; line-height:1.8;">Many scientists are deeply concerned about the future of our planet. Urgent action is required at all levels of society.</div>
+            </div>
+          </div>
+
+          <div class="section-label">Keyboard Shortcuts – Hour 2</div>
+          <div class="wide-card">
+            <div class="shortcuts-wrap">
+              <span class="shortcut">Ctrl+B</span> Bold
+              <span class="shortcut">Ctrl+I</span> Italic
+              <span class="shortcut">Ctrl+U</span> Underline
+              <span class="shortcut">Ctrl+L</span> Left Align
+              <span class="shortcut">Ctrl+E</span> Centre
+              <span class="shortcut">Ctrl+R</span> Right Align
+              <span class="shortcut">Ctrl+J</span> Justify
+              <span class="shortcut">Ctrl+Shift+C</span> Copy Format
+              <span class="shortcut">Ctrl+Shift+V</span> Paste Format
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">💡</span>
+            <p>Try not to use more than 2–3 different fonts in one document. Stick to the rule: <strong>one font for headings, one for body</strong>. Keep it clean and readable!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─────────── SLIDE 3: HOUR 3 ─────────── -->
+      <div class="slide" data-slide="3">
+        <div class="slide-header">
+          <div class="slide-emoji">📐</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Hour 3 · Unit 31</div>
+            <div class="slide-title">Structure & Visuals</div>
+            <div class="slide-goal">🎯 Goal: Build well-structured, visually rich documents</div>
+          </div>
+        </div>
+        <div class="slide-scroll">
+
+          <div class="section-label">Page Setup</div>
+          <div class="cards-grid">
+            <div class="info-card">
+              <div class="card-icon">📏</div>
+              <div class="card-title">Margins</div>
+              <div class="card-text"><strong>Layout tab → Margins.</strong><br>
+                • <strong>Normal:</strong> 2.54cm (1 inch) all sides — standard<br>
+                • <strong>Narrow:</strong> 1.27cm — fits more text per page<br>
+                • <strong>Wide:</strong> 3.81cm — leaves space for notes/binding</div>
+            </div>
+            <div class="info-card teal">
+              <div class="card-icon">🔄</div>
+              <div class="card-title">Orientation</div>
+              <div class="card-text"><strong>Layout tab → Orientation</strong><br>
+                • <strong>Portrait</strong> — taller than wide. Default. Used for letters, essays, most documents.<br>
+                • <strong>Landscape</strong> — wider than tall. Used for tables, charts, certificates, presentations.</div>
+            </div>
+          </div>
+
+          <div class="section-label">Images & Wrap Text</div>
+          <div class="cards-grid">
+            <div class="info-card orange">
+              <div class="card-icon">🖼️</div>
+              <div class="card-title">Insert Image</div>
+              <div class="card-text"><strong>Insert tab → Pictures → This Device</strong> (from your computer) or <strong>Online Pictures</strong> (Bing search). Click an image, then drag the corner handles to resize — always drag corners to keep proportions!</div>
+            </div>
+            <div class="info-card purple">
+              <div class="card-icon">↩️</div>
+              <div class="card-title">Wrap Text</div>
+              <div class="card-text">Click image → Picture Format tab → Wrap Text:<br>
+                • <strong>Square</strong> — text wraps around a square box<br>
+                • <strong>Tight</strong> — text follows the image shape closely<br>
+                • <strong>In Front/Behind</strong> — image floats over or under text</div>
+            </div>
+          </div>
+
+          <div class="section-label">Basic Tables (3×3 Example)</div>
+          <div class="wide-card">
+            <div class="wide-card-title">📊 Insert a Table: Insert tab → Table → drag to select size</div>
+            <table class="content-table" style="margin-top:12px; margin-bottom:0;">
+              <thead><tr><th>Name</th><th>Subject</th><th>Score</th></tr></thead>
+              <tbody>
+                <tr><td>Ali</td><td>Maths</td><td>85%</td></tr>
+                <tr><td>Sara</td><td>Science</td><td>92%</td></tr>
+                <tr><td>Omar</td><td>English</td><td>78%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tip-box" style="margin-top:10px;">
+            <span class="tip-icon">💡</span>
+            <p>Press <strong>Tab</strong> inside a table to jump to the next cell. Press Tab in the last cell to automatically add a new row! Use Table Design tab to add colour and style to your table.</p>
+          </div>
+
+          <div class="section-label">Headers, Footers & Page Numbers</div>
+          <div class="cards-grid">
+            <div class="info-card green">
+              <div class="card-icon">🔝</div>
+              <div class="card-title">Header & Footer</div>
+              <div class="card-text"><strong>Insert tab → Header</strong> or <strong>Footer</strong>. Pick a style from the gallery. Type your text (e.g. school name, document title). Double-click outside the header area to return to editing the main document.</div>
+            </div>
+            <div class="info-card pink">
+              <div class="card-icon">#️⃣</div>
+              <div class="card-title">Page Numbers</div>
+              <div class="card-text"><strong>Insert tab → Page Number.</strong> Choose: Top/Bottom, Left/Centre/Right. For "Page X of Y" format: Insert → Quick Parts → Field → NumPages. Professional documents always include page numbers!</div>
+            </div>
+          </div>
+
+          <div class="section-label">Mini Practical Exercise</div>
+          <div class="practice-card">
+            <div class="practice-title">🧪 Try This Now!</div>
+            <ul class="practice-steps">
+              <li>Open Word or Google Docs and create a blank document</li>
+              <li>Set margins to Narrow (Layout → Margins → Narrow)</li>
+              <li>Type a heading: "My School Report" — centre align it, font size 20</li>
+              <li>Insert a 3-column, 4-row table. Fill it with subject names and scores</li>
+              <li>Insert any image and set Wrap Text to Square</li>
+              <li>Add a footer with your name and a page number on the right</li>
+              <li>Save as a PDF using File → Export</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─────────── SLIDE 4: HOUR 4 ─────────── -->
+      <div class="slide" data-slide="4">
+        <div class="slide-header">
+          <div class="slide-emoji">✅</div>
+          <div class="slide-title-wrap">
+            <div class="slide-num">Hour 4 · Unit 31</div>
+            <div class="slide-title">Editing & Finalizing</div>
+            <div class="slide-goal">🎯 Goal: Polish, proofread, and produce a finished professional document</div>
+          </div>
+        </div>
+        <div class="slide-scroll">
+
+          <div class="section-label">Editing Tools</div>
+          <div class="cards-grid">
+            <div class="info-card">
+              <div class="card-icon">🔍</div>
+              <div class="card-title">Find & Replace</div>
+              <div class="card-text">Press <span class="shortcut">Ctrl+H</span>. Type the word you want to find in the "Find" box, and the replacement word in "Replace with". Click <strong>Replace All</strong> to change every instance at once — saves huge amounts of time in long documents!</div>
+            </div>
+            <div class="info-card teal">
+              <div class="card-icon">✍️</div>
+              <div class="card-title">Spelling & Grammar</div>
+              <div class="card-text">Press <span class="shortcut">F7</span> to open the full spelling and grammar checker. Red wavy underline = spelling error. Blue/green underline = grammar suggestion. Right-click any underlined word for quick fix options.</div>
+            </div>
+            <div class="info-card orange">
+              <div class="card-icon">📚</div>
+              <div class="card-title">Thesaurus</div>
+              <div class="card-text">Right-click any word → <strong>Synonyms</strong> for a quick list. Or go to <strong>Review tab → Thesaurus</strong> for a full panel. Use it to avoid repeating the same word and to find stronger vocabulary. Great for essays!</div>
+            </div>
+            <div class="info-card purple">
+              <div class="card-icon">↩️↪️</div>
+              <div class="card-title">Undo & Redo</div>
+              <div class="card-text"><span class="shortcut">Ctrl+Z</span> Undo — reverses your last action. Press multiple times to go further back.<br><span class="shortcut">Ctrl+Y</span> Redo — reverses an undo. Also works to repeat the last action. Your safety net!</div>
+            </div>
+          </div>
+
+          <div class="section-label">Keyboard Shortcuts – Hour 4</div>
+          <div class="wide-card">
+            <div class="shortcuts-wrap">
+              <span class="shortcut">Ctrl+H</span> Find & Replace
+              <span class="shortcut">F7</span> Spelling Check
+              <span class="shortcut">Ctrl+Z</span> Undo
+              <span class="shortcut">Ctrl+Y</span> Redo
+              <span class="shortcut">Ctrl+F</span> Find (only)
+              <span class="shortcut">Shift+F7</span> Thesaurus
+              <span class="shortcut">Ctrl+P</span> Print / Print Preview
+              <span class="shortcut">Alt+F4</span> Close Word
+            </div>
+          </div>
+
+          <div class="section-label">Print Preview</div>
+          <div class="wide-card">
+            <div class="wide-card-title">🖨️ Always Preview Before Printing!</div>
+            <div class="card-text">Go to <strong>File → Print</strong>. The preview on the right shows exactly how your document will look on paper. Check: Are margins correct? Are images in the right place? Is the text cut off? Make changes before you waste paper and ink! In Google Docs: <strong>File → Print</strong> → uses your browser's print dialog.</div>
+          </div>
+
+          <div class="section-label">🏆 Final Project</div>
+          <div class="project-card">
+            <div class="project-icon">📋</div>
+            <div class="project-title">Create a 1-Page Professional Letter or Flyer</div>
+            <div class="project-desc">Apply everything from all 4 hours to create a complete, polished document from scratch. Choose one of the two options below:</div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; text-align:left; margin-bottom:18px;">
+              <div style="background:white; border-radius:14px; padding:16px; box-shadow:0 4px 16px rgba(37,99,235,0.10); border-top: 3px solid var(--blue);">
+                <div style="font-weight:800; font-size:13px; color:var(--blue); margin-bottom:8px;">📨 Option A: Professional Letter</div>
+                <ul class="project-checklist" style="margin-bottom:0;">
+                  <li>Your name & address (header/top)</li>
+                  <li>Date (right-aligned)</li>
+                  <li>Recipient name & address</li>
+                  <li>Subject line (bold, centred)</li>
+                  <li>3 paragraphs of body text</li>
+                  <li>Formal closing (Yours sincerely,)</li>
+                  <li>Page number in footer</li>
+                </ul>
+              </div>
+              <div style="background:white; border-radius:14px; padding:16px; box-shadow:0 4px 16px rgba(124,58,237,0.10); border-top: 3px solid var(--purple);">
+                <div style="font-weight:800; font-size:13px; color:var(--purple); margin-bottom:8px;">🎨 Option B: Event Flyer</div>
+                <ul class="project-checklist" style="margin-bottom:0;">
+                  <li>Bold, large event title (centred)</li>
+                  <li>At least 1 inserted image</li>
+                  <li>Date, time, and location info</li>
+                  <li>Bullet list of what's included</li>
+                  <li>Table (schedule or pricing)</li>
+                  <li>Colour-coded text and borders</li>
+                  <li>Landscape orientation</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="background: rgba(124,58,237,0.08); border-radius:12px; padding:14px; margin-bottom:18px; font-size:13px; color:var(--text); line-height:1.7; text-align:left;">
+              <strong>📌 Checklist before submitting:</strong><br>
+              ☐ Spelling checked (F7) &nbsp; ☐ Font consistent throughout &nbsp; ☐ Margins set correctly &nbsp; ☐ Saved as .docx <em>and</em> exported as PDF &nbsp; ☐ Print Preview checked
+            </div>
+
+            <button class="submit-btn" onclick="alert('Great work! Save your document and share the PDF with your teacher.')">🎉 Submit Final Project</button>
+          </div>
+
+          <div class="tip-box">
+            <span class="tip-icon">🌐</span>
+            <p><strong>Google Docs users:</strong> Go to File → Download → Microsoft Word (.docx) to get a Word-compatible version, or File → Download → PDF to submit as PDF. Your teacher can open either!</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /slide-area -->
+  </div><!-- /main-area -->
+
+  <!-- NAV BAR -->
+  <div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>← Previous</button>
+    <div class="slide-counter" id="counter">1 / 5</div>
+    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+  </div>
+</div><!-- /app -->
+
+<script>
+  const TOTAL = 5;
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const hourBtns = document.querySelectorAll('.hour-btn');
+
+  function startUnit() {
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('app').classList.add('visible');
+  }
+
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    hourBtns[current].classList.remove('active');
+    current = index;
+    slides[current].classList.add('active');
+    hourBtns[current].classList.add('active');
+    hourBtns[current].scrollIntoView({ block: 'nearest' });
+    updateUI();
+  }
+
+  function changeSlide(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < TOTAL) goTo(next);
+  }
+
+  function updateUI() {
+    document.getElementById('counter').textContent = `${current + 1} / ${TOTAL}`;
+    const labels = ['Overview', 'Hour 1', 'Hour 2', 'Hour 3', 'Hour 4'];
+    document.getElementById('topbar-label').textContent = `${labels[current]} of 5`;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === TOTAL - 1;
+    document.getElementById('nextBtn').textContent = current === TOTAL - 1 ? '🏆 Complete!' : 'Next →';
+    document.getElementById('progress').style.width = ((current + 1) / TOTAL * 100) + '%';
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') changeSlide(1);
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+  });
+
+  updateUI();
+</script>
+</body>
+</html>
