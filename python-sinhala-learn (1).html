@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐍 Learn Python with Ashan</title>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+:root{
+  --bg:#0a0818;--card:#12112a;--card2:#1a1a3e;
+  --a1:#ff6b6b;--a2:#ffd93d;--a3:#6bcb77;--a4:#4d96ff;--a5:#c77dff;--a6:#ff9f43;
+  --text:#f0f0f0;--text2:#9090b0;--cbg:#060d13;--cborder:#2ea043;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* STARS */
+#stars-bg{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:tw var(--d) ease-in-out infinite;}
+@keyframes tw{0%,100%{opacity:.1;transform:scale(1);}50%{opacity:.9;transform:scale(1.6);}}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:200;background:rgba(10,8,24,.97);backdrop-filter:blur(14px);border-bottom:2px solid var(--a5);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
+.logo{font-family:'Fredoka One',cursive;font-size:1.25rem;background:linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#c77dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hright{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.lctr{background:var(--a5);color:#fff;padding:3px 12px;border-radius:20px;font-weight:700;font-size:.78rem;}
+
+/* LEVEL BADGE */
+.level-badge{background:linear-gradient(135deg,var(--a2),var(--a6));color:#000;padding:3px 12px;border-radius:20px;font-weight:800;font-size:.75rem;display:flex;align-items:center;gap:4px;}
+
+/* POINTS */
+.pts-display{background:rgba(255,217,61,.1);border:1px solid var(--a2);color:var(--a2);padding:3px 12px;border-radius:20px;font-weight:800;font-size:.78rem;display:flex;align-items:center;gap:4px;}
+
+.pw{width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden;}
+.pf{height:100%;background:linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#c77dff);border-radius:8px;transition:width .5s ease;}
+
+main{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:18px 13px 130px;}
+
+/* LESSON CARD */
+.lesson-card{background:var(--card2);border-radius:22px;padding:22px 18px;box-shadow:0 0 40px rgba(199,125,255,.1);border:1px solid rgba(255,255,255,.06);animation:cIn .4s ease;display:none;}
+.lesson-card.active{display:block;}
+@keyframes cIn{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.lt{font-family:'Fredoka One',cursive;font-size:1.6rem;margin-bottom:3px;display:flex;align-items:center;gap:9px;}
+.ls{color:var(--text2);font-size:.85rem;margin-bottom:16px;}
+
+/* SECTION BLOCK */
+.sb{background:rgba(255,255,255,.03);border-left:4px solid var(--a4);border-radius:0 12px 12px 0;padding:13px 15px;margin:14px 0;}
+.sb.g{border-color:var(--a3);}.sb.y{border-color:var(--a2);}.sb.p{border-color:var(--a1);}.sb.v{border-color:var(--a5);}.sb.o{border-color:var(--a6);}
+.sbt{font-weight:800;font-size:.9rem;margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+
+/* TYPING */
+.typing-text{font-size:.97rem;line-height:1.9;}
+.tcursor{display:inline-block;width:2px;height:1em;background:var(--a2);animation:bl .7s infinite;vertical-align:middle;}
+@keyframes bl{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* CODE WRAP — button above */
+.code-wrap{margin:10px 0;}
+.code-toolbar{display:flex;justify-content:flex-end;gap:6px;margin-bottom:4px;}
+.copy-btn,.edit-btn{border:1px solid rgba(255,255,255,.12);color:var(--text2);padding:4px 12px;border-radius:7px;cursor:pointer;font-size:.73rem;font-family:'Nunito',sans-serif;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:4px;}
+.copy-btn{background:rgba(255,255,255,.06);}
+.copy-btn:hover{background:rgba(77,150,255,.18);color:#fff;border-color:var(--a4);}
+.edit-btn{background:rgba(107,203,119,.08);border-color:var(--a3);color:var(--a3);}
+.edit-btn:hover{background:rgba(107,203,119,.2);}
+
+/* CODE BLOCK (read-only display) */
+.code-block{background:var(--cbg);border:1px solid var(--cborder);border-radius:12px;padding:15px;font-family:'Courier New',monospace;font-size:.88rem;color:#e6edf3;overflow-x:auto;white-space:pre;line-height:1.75;}
+.cm{color:#6e7681;}.kw{color:#ff7b72;font-weight:bold;}.st{color:#a5d6ff;}.nm{color:#79c0ff;}.fn{color:#d2a8ff;}.cl{color:#ffa657;}
+
+/* OUTPUT */
+.out-box{background:#050f08;border:1px solid var(--a3);border-radius:10px;padding:10px 14px;margin-top:5px;font-family:'Courier New',monospace;color:var(--a3);font-size:.85rem;line-height:1.75;}
+.out-box::before{content:'📺 Output:';display:block;color:var(--text2);font-size:.7rem;margin-bottom:3px;font-family:'Nunito',sans-serif;}
+
+/* ═══ PYODIDE RUNNER ═══ */
+.runner-wrap{background:var(--cbg);border:2px solid var(--a4);border-radius:16px;overflow:hidden;margin:12px 0;}
+.runner-header{background:rgba(77,150,255,.12);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(77,150,255,.2);}
+.runner-title{font-size:.82rem;font-weight:800;color:var(--a4);display:flex;align-items:center;gap:6px;}
+.run-btn{background:linear-gradient(135deg,var(--a3),#2ecc71);border:none;color:#000;padding:7px 18px;border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:800;transition:all .2s;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:5px;}
+.run-btn:hover{transform:scale(1.05);box-shadow:0 4px 14px rgba(107,203,119,.4);}
+.run-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.clear-btn{background:rgba(255,107,107,.12);border:1px solid var(--a1);color:var(--a1);padding:5px 12px;border-radius:7px;cursor:pointer;font-size:.73rem;font-weight:700;font-family:'Nunito',sans-serif;}
+.editor-area{padding:0;}
+.code-editor{width:100%;min-height:110px;background:var(--cbg);border:none;color:#e6edf3;font-family:'Courier New',monospace;font-size:.88rem;padding:14px;resize:vertical;outline:none;line-height:1.75;tab-size:4;}
+.output-area{background:#020a04;border-top:1px solid rgba(77,150,255,.15);padding:12px 14px;font-family:'Courier New',monospace;font-size:.85rem;min-height:40px;max-height:200px;overflow-y:auto;line-height:1.7;}
+.output-line{margin-bottom:2px;}
+.output-line.ok{color:var(--a3);}
+.output-line.err{color:var(--a1);}
+.output-label{font-size:.7rem;color:var(--text2);font-family:'Nunito',sans-serif;padding:6px 14px 2px;border-top:1px solid rgba(255,255,255,.05);}
+.pyodide-loading{padding:12px 14px;color:var(--text2);font-size:.8rem;display:flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif;}
+.spin{display:inline-block;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* FLOWCHART */
+.flow-wrap{background:rgba(10,8,24,.6);border:2px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;margin:12px 0;overflow-x:auto;}
+.flow-title{font-size:.85rem;font-weight:800;color:var(--a2);margin-bottom:12px;text-align:center;}
+svg.flow{display:block;margin:auto;}
+
+/* QUIZ */
+.quiz-box{background:linear-gradient(135deg,rgba(77,150,255,.07),rgba(199,125,255,.07));border:2px solid var(--a4);border-radius:18px;padding:18px;margin-top:24px;}
+.qzt{font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--a2);margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+.qzq{font-size:.9rem;margin-bottom:11px;line-height:1.7;}
+.qzopts{display:grid;gap:7px;}
+.qopt{background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.09);border-radius:11px;padding:10px 13px;cursor:pointer;transition:all .2s;font-size:.86rem;text-align:left;color:var(--text);font-family:'Nunito',sans-serif;}
+.qopt:hover:not([disabled]){background:rgba(77,150,255,.1);border-color:var(--a4);transform:translateX(4px);}
+.qopt.correct{background:rgba(107,203,119,.16);border-color:var(--a3);animation:pop .3s ease;}
+.qopt.wrong{background:rgba(255,107,107,.16);border-color:var(--a1);animation:shk .3s ease;}
+.qopt[disabled]{pointer-events:none;}
+@keyframes pop{0%{transform:scale(.97);}50%{transform:scale(1.03);}100%{transform:scale(1);}}
+@keyframes shk{0%,100%{transform:translateX(0);}30%{transform:translateX(-5px);}70%{transform:translateX(5px);}}
+.qfb{margin-top:9px;padding:10px 13px;border-radius:9px;font-weight:700;font-size:.86rem;display:none;}
+.qfb.show{display:block;animation:fi .3s ease;}
+.qfb.ok{background:rgba(107,203,119,.1);color:var(--a3);border:1px solid var(--a3);}
+.qfb.no{background:rgba(255,107,107,.1);color:var(--a1);border:1px solid var(--a1);}
+@keyframes fi{from{opacity:0;}to{opacity:1;}}
+.pts-award{display:inline-flex;align-items:center;gap:4px;background:rgba(255,217,61,.15);border:1px solid var(--a2);color:var(--a2);padding:3px 10px;border-radius:20px;font-size:.78rem;font-weight:800;margin-left:8px;animation:pop .4s ease;}
+
+/* HIGHLIGHT */
+.hl{background:linear-gradient(135deg,rgba(255,217,61,.06),rgba(255,107,107,.06));border:2px solid var(--a2);border-radius:13px;padding:12px 14px;margin:12px 0;display:flex;gap:9px;align-items:flex-start;}
+.hli{font-size:1.5rem;flex-shrink:0;}
+.hlt{font-size:.86rem;line-height:1.75;}
+
+/* BADGE SYSTEM */
+.badge-row{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0;}
+.badge{padding:4px 11px;border-radius:20px;font-size:.76rem;font-weight:700;display:flex;align-items:center;gap:3px;}
+.bb{background:rgba(77,150,255,.14);border:1px solid var(--a4);color:var(--a4);}
+.bg{background:rgba(107,203,119,.14);border:1px solid var(--a3);color:var(--a3);}
+.bp{background:rgba(255,107,107,.14);border:1px solid var(--a1);color:var(--a1);}
+.by{background:rgba(255,217,61,.14);border:1px solid var(--a2);color:var(--a2);}
+.bv{background:rgba(199,125,255,.14);border:1px solid var(--a5);color:var(--a5);}
+
+/* KEYWORD GRID */
+.kw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:9px;margin:12px 0;}
+.kw-card{background:rgba(255,255,255,.04);border-radius:13px;padding:11px 9px;text-align:center;border:2px solid transparent;transition:all .3s;cursor:default;}
+.kw-card:hover{transform:translateY(-4px);border-color:var(--a5);box-shadow:0 8px 18px rgba(199,125,255,.25);}
+.kn{font-family:'Courier New',monospace;font-size:.95rem;font-weight:bold;color:var(--a2);margin-bottom:3px;}
+.km{font-size:.7rem;color:var(--text2);}
+.ke{font-size:1.35rem;margin-bottom:3px;}
+
+/* LOOP VISUAL */
+.loop-vis{background:rgba(77,150,255,.05);border:2px dashed var(--a4);border-radius:13px;padding:12px;margin:10px 0;text-align:center;}
+.lstep{display:inline-block;background:var(--a4);color:#fff;border-radius:6px;padding:3px 9px;margin:2px;font-size:.76rem;font-weight:700;animation:lp 2s ease infinite;}
+@keyframes lp{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+/* IF VISUAL */
+.if-vis{display:flex;flex-direction:column;align-items:center;margin:12px 0;}
+.ifb,.elsb,.resb{padding:8px 18px;border-radius:9px;font-weight:700;font-size:.8rem;text-align:center;}
+.ifb{background:rgba(77,150,255,.16);border:2px solid var(--a4);color:var(--a4);}
+.elsb{background:rgba(255,107,107,.16);border:2px solid var(--a1);color:var(--a1);}
+.resb{background:rgba(107,203,119,.16);border:2px solid var(--a3);color:var(--a3);}
+.ifarr{font-size:1.1rem;margin:2px 0;color:var(--text2);}
+.ifbr{display:flex;gap:16px;align-items:flex-start;}
+.brc{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.brl{font-size:.7rem;color:var(--text2);}
+
+/* POINTS POPUP */
+.pts-popup{position:fixed;top:70px;right:16px;z-index:500;background:linear-gradient(135deg,#ffd93d,#ff9f43);color:#000;padding:10px 18px;border-radius:14px;font-weight:800;font-size:1rem;box-shadow:0 6px 20px rgba(255,217,61,.4);animation:popUp .6s ease forwards;pointer-events:none;}
+@keyframes popUp{0%{opacity:0;transform:translateY(10px) scale(.8);}30%{opacity:1;transform:translateY(-5px) scale(1.1);}70%{opacity:1;transform:translateY(0) scale(1);}100%{opacity:0;transform:translateY(-20px) scale(.9);}}
+
+/* LEVEL UP */
+.levelup-popup{position:fixed;inset:0;z-index:600;background:rgba(10,8,24,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:fi .4s ease;}
+.levelup-popup.hide{display:none;}
+.lu-em{font-size:4rem;animation:bnc 1s ease infinite;}
+@keyframes bnc{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.lu-title{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--a2);margin:10px 0 4px;}
+.lu-sub{color:var(--text2);font-size:.95rem;margin-bottom:18px;}
+.lu-btn{background:linear-gradient(135deg,var(--a2),var(--a6));border:none;color:#000;padding:12px 28px;border-radius:50px;font-size:.95rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;}
+
+/* NAV */
+.nav-btns{position:fixed;bottom:0;left:0;right:0;z-index:150;background:rgba(10,8,24,.97);border-top:2px solid rgba(255,255,255,.07);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.nav-btn{background:linear-gradient(135deg,var(--c1),var(--c2));border:none;color:#fff;padding:10px 20px;border-radius:50px;font-size:.88rem;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;font-family:'Nunito',sans-serif;box-shadow:0 3px 12px rgba(0,0,0,.3);}
+.nav-btn:hover:not([disabled]){transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.4);}
+.nav-btn[disabled]{opacity:.3;cursor:not-allowed;}
+.btn-back{--c1:#3a3a3a;--c2:#252525;}.btn-next{--c1:#6bcb77;--c2:#4d96ff;}
+.ldots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);cursor:pointer;transition:all .2s;}
+.dot.active{background:var(--a2);transform:scale(1.5);}.dot.done{background:var(--a3);}
+
+/* MASCOT */
+.mascot{position:fixed;bottom:75px;right:13px;z-index:50;font-size:2.1rem;cursor:pointer;animation:flt 3s ease-in-out infinite;user-select:none;filter:drop-shadow(0 3px 8px rgba(255,255,255,.12));}
+@keyframes flt{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.mbub{position:fixed;bottom:120px;right:13px;z-index:50;background:var(--card2);border:2px solid var(--a2);border-radius:13px 13px 3px 13px;padding:8px 11px;max-width:170px;font-size:.75rem;display:none;animation:fi .3s ease;box-shadow:0 3px 16px rgba(0,0,0,.4);}
+.mbub.show{display:block;}
+
+/* CONGRATS */
+#cong{display:none;position:fixed;inset:0;z-index:400;background:rgba(10,8,24,.96);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+#cong.show{display:flex;animation:fi .5s ease;}
+.ce{font-size:4rem;animation:bnc 1s ease infinite;}
+.ct{font-family:'Fredoka One',cursive;font-size:2rem;background:linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:12px 0 5px;}
+.cd{font-size:.9rem;color:var(--text2);margin-bottom:18px;line-height:1.75;}
+.rbtn{background:linear-gradient(135deg,#ff6b6b,#ffd93d);border:none;color:#000;padding:12px 28px;border-radius:50px;font-size:.95rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;}
+.cf{position:fixed;width:8px;height:8px;animation:cfal var(--d) linear forwards;z-index:600;pointer-events:none;}
+@keyframes cfal{0%{transform:translateY(-10px) rotate(0);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* OOP CLASS DIAGRAM */
+.class-diagram{background:rgba(255,217,61,.04);border:2px solid var(--a2);border-radius:14px;overflow:hidden;margin:12px 0;font-size:.82rem;}
+.cd-header{background:rgba(255,217,61,.12);padding:8px 14px;font-weight:800;color:var(--a2);border-bottom:1px solid rgba(255,217,61,.2);font-family:'Courier New',monospace;}
+.cd-section{padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.04);}
+.cd-section:last-child{border-bottom:none;}
+.cd-attr{color:var(--a4);padding:2px 0;}
+.cd-method{color:var(--a3);padding:2px 0;}
+
+/* LIBRARY CARD */
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:12px 0;}
+.lib-card{background:rgba(255,255,255,.04);border-radius:12px;padding:12px;border:2px solid rgba(255,255,255,.08);transition:all .3s;cursor:default;}
+.lib-card:hover{border-color:var(--a4);transform:translateY(-3px);box-shadow:0 6px 16px rgba(77,150,255,.2);}
+.lib-name{font-family:'Courier New',monospace;color:var(--a2);font-weight:bold;font-size:.9rem;margin-bottom:3px;}
+.lib-use{font-size:.74rem;color:var(--text2);}
+.lib-em{font-size:1.4rem;margin-bottom:4px;}
+
+/* TABS */
+.tabs{display:flex;gap:0;margin-bottom:-1px;}
+.tab{padding:7px 16px;border-radius:10px 10px 0 0;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s;border:1px solid transparent;color:var(--text2);}
+.tab.active{background:var(--cbg);border-color:var(--cborder);border-bottom-color:var(--cbg);color:var(--a3);}
+.tab:hover:not(.active){background:rgba(255,255,255,.05);}
+.tab-content{display:none;}.tab-content.active{display:block;}
+
+@media(max-width:480px){.lt{font-size:1.25rem;}.nav-btn{padding:8px 13px;font-size:.8rem;}.ldots{display:none;}main{padding:12px 9px 128px;}}
+</style>
+</head>
+<body>
+<div id="stars-bg"></div>
+
+<header>
+  <div class="logo">🐍 Learn Python with Ashan</div>
+  <div class="hright">
+    <div class="pts-display">⭐ <span id="pts-val">0</span> pts</div>
+    <div class="level-badge" id="level-badge">🐣 Python Baby</div>
+    <div class="lctr" id="lctr">1 / 16</div>
+  </div>
+  <div style="width:100%"><div class="pw"><div class="pf" id="pf" style="width:6.25%"></div></div></div>
+</header>
+
+<main id="main">
+
+<!-- ═══════════════════════════════════════════
+  L1 — INTRO + PRINT
+═══════════════════════════════════════════ -->
+<div class="lesson-card active" data-lesson="1">
+  <div class="lt">🤖 Python හිතවතා!</div>
+  <div class="ls">පළවෙනි පාඩම · Robot ට කතා කරමු</div>
+  <div class="sb"><div class="sbt">🌟 Python කියන්නේ?</div><div class="typing-text" id="intro-text"></div></div>
+  <div class="sb g">
+    <div class="sbt">🖨️ print() — Robot ලවා කතා කරවමු</div>
+    <p style="font-size:.86rem;line-height:1.8;margin-bottom:9px;"><strong style="color:var(--a2)">print()</strong> = Robot ට "screen ලෙස පෙන්වන්න!" කියලා කියන ක්‍රමය! 🗣️</p>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'print(\"මම Python ඉගෙනගන්නවා\")\nprint(\"Hello World!\")\nprint(5 + 3)')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="fn">print</span>(<span class="st">"මම Python ඉගෙනගන්නවා"</span>)
+<span class="fn">print</span>(<span class="st">"Hello World!"</span>)
+<span class="fn">print</span>(<span class="nm">5</span> + <span class="nm">3</span>)</div>
+    </div>
+    <div class="out-box">මම Python ඉගෙනගන්නවා<br>Hello World!<br>8</div>
+  </div>
+  <div class="hl"><div class="hli">⚠️</div><div class="hlt"><strong style="color:var(--a1)">Quotes Rule!</strong><br>✅ <code style="color:var(--a3)">print("Hello")</code><br>❌ <code style="color:var(--a1)">print(Hello)</code> → Error!</div></div>
+  <div class="sb y">
+    <div class="sbt">🔢 ගණිත Robot!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'print(10 + 5)\nprint(20 - 7)\nprint(4 * 3)\nprint(10 / 2)')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="fn">print</span>(<span class="nm">10</span> + <span class="nm">5</span>)   <span class="cm"># 15</span>
+<span class="fn">print</span>(<span class="nm">20</span> - <span class="nm">7</span>)   <span class="cm"># 13</span>
+<span class="fn">print</span>(<span class="nm">4</span>  * <span class="nm">3</span>)   <span class="cm"># 12</span>
+<span class="fn">print</span>(<span class="nm">10</span> / <span class="nm">2</span>)   <span class="cm"># 5.0</span></div>
+    </div>
+  </div>
+  <!-- PYODIDE RUNNER -->
+  <div id="runner-1" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Live Python Editor — Code ලිඛිලා Run කරන්න!</div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <button class="clear-btn" onclick="clearRunner('runner-1')">🗑️ Clear</button>
+        <button class="run-btn" id="run-1" onclick="runCode('runner-1')">▶ Run</button>
+      </div>
+    </div>
+    <div class="editor-area">
+      <textarea class="code-editor" id="editor-1" spellcheck="false">print("Hello! මේ ඔයාගේ first Python code!")
+print("ඔයාගේ නම ලිහිල්ලා Run කරන්න!")
+print(100 + 50)</textarea>
+    </div>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-1"><span style="color:var(--text2);font-size:.78rem;">▶ Run button එක click කරන්න...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 1 <span style="font-size:.75rem;color:var(--text2)">(+10 pts)</span></div>
+    <div class="qzq">✨ <code>"Ayubowan!"</code> print කරන නිවැරදි code?</div>
+    <div class="qzopts" id="opts-Q1">
+      <button class="qopt" onclick="check(this,false,'Q1',0)">print[Ayubowan!]</button>
+      <button class="qopt" onclick="check(this,true,'Q1',10)">print("Ayubowan!")</button>
+      <button class="qopt" onclick="check(this,false,'Q1',0)">Print("Ayubowan!")</button>
+      <button class="qopt" onclick="check(this,false,'Q1',0)">print(Ayubowan!)</button>
+    </div>
+    <div class="qfb" id="fb-Q1"></div>
+  </div>
+</div>
+
+<!-- L2 — VARIABLES -->
+<div class="lesson-card" data-lesson="2">
+  <div class="lt">📦 Variables — "මතකය"</div>
+  <div class="ls">දෙවෙනි පාඩම · Robot ගේ Memory Box</div>
+  <div class="sb">
+    <div class="sbt">📦 Variable = ලේබල් ලෑව පෙට්ටිය!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'apples = 5\nname = \"Kasun\"\nage = 12\nprint(apples)\nprint(name)\nprint(age)')">✏️ Try it!</button></div>
+      <div class="code-block">apples = <span class="nm">5</span>
+name   = <span class="st">"Kasun"</span>
+age    = <span class="nm">12</span>
+
+<span class="fn">print</span>(apples)  <span class="cm"># 5</span>
+<span class="fn">print</span>(name)    <span class="cm"># Kasun</span>
+<span class="fn">print</span>(age)     <span class="cm"># 12</span></div>
+    </div>
+    <div class="out-box">5<br>Kasun<br>12</div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">🍎 Variable ගණිතය!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'balls = 10\neaten = 3\nremaining = balls - eaten\nprint(\"ඉතුරු:\", remaining)\nremaining = remaining + 5\nprint(\"Update:\", remaining)')">✏️ Try it!</button></div>
+      <div class="code-block">balls     = <span class="nm">10</span>
+eaten     = <span class="nm">3</span>
+remaining = balls - eaten
+
+<span class="fn">print</span>(<span class="st">"ඉතුරු:"</span>, remaining)
+<span class="cm"># → 7</span>
+
+remaining = remaining + <span class="nm">5</span>
+<span class="fn">print</span>(<span class="st">"Update:"</span>, remaining)
+<span class="cm"># → 12</span></div>
+    </div>
+    <div class="out-box">ඉතුරු: 7<br>Update: 12</div>
+  </div>
+  <div id="runner-2" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Variables Practice!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-2')">🗑️</button><button class="run-btn" id="run-2" onclick="runCode('runner-2')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-2" spellcheck="false"># ඔයාගේ own variable හදන්න!
+my_name = "ඔයාගේ නම"
+my_age  = 10
+
+print("Name:", my_name)
+print("Age:", my_age)
+print("Next year:", my_age + 1)</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-2"><span style="color:var(--text2);font-size:.78rem;">▶ Run click...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 2 <span style="font-size:.75rem;color:var(--text2)">(+10 pts)</span></div>
+    <div class="qzq">✨ <code>x=10, y=3</code> → <code>print(x-y)</code> = ?</div>
+    <div class="qzopts" id="opts-Q2">
+      <button class="qopt" onclick="check(this,false,'Q2',0)">10</button>
+      <button class="qopt" onclick="check(this,false,'Q2',0)">3</button>
+      <button class="qopt" onclick="check(this,true,'Q2',10)">7</button>
+      <button class="qopt" onclick="check(this,false,'Q2',0)">x - y</button>
+    </div>
+    <div class="qfb" id="fb-Q2"></div>
+  </div>
+</div>
+
+<!-- L3 — KEYWORDS -->
+<div class="lesson-card" data-lesson="3">
+  <div class="lt">🔑 "මැජික් වචන"</div>
+  <div class="ls">තෙවෙනි පාඩම · Keywords!</div>
+  <div class="kw-grid">
+    <div class="kw-card"><div class="ke">📢</div><div class="kn">print</div><div class="km">Show screen</div></div>
+    <div class="kw-card"><div class="ke">🤔</div><div class="kn">if</div><div class="km">"නම්"</div></div>
+    <div class="kw-card"><div class="ke">🔄</div><div class="kn">else</div><div class="km">"නැත්නම්"</div></div>
+    <div class="kw-card"><div class="ke">🔁</div><div class="kn">for</div><div class="km">repeat</div></div>
+    <div class="kw-card"><div class="ke">✅</div><div class="kn">True</div><div class="km">"ඇත්ත"</div></div>
+    <div class="kw-card"><div class="ke">❌</div><div class="kn">False</div><div class="km">"බොරු"</div></div>
+    <div class="kw-card"><div class="ke">🧩</div><div class="kn">def</div><div class="km">function</div></div>
+    <div class="kw-card"><div class="ke">↩️</div><div class="kn">return</div><div class="km">value back</div></div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">🔢 True / False!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'print(5 > 3)\nprint(2 > 8)\nprint(7 == 7)\nprint(4 == 5)')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="fn">print</span>(<span class="nm">5</span> > <span class="nm">3</span>)   <span class="cm"># True</span>
+<span class="fn">print</span>(<span class="nm">2</span> > <span class="nm">8</span>)   <span class="cm"># False</span>
+<span class="fn">print</span>(<span class="nm">7</span> == <span class="nm">7</span>)  <span class="cm"># True</span>
+<span class="fn">print</span>(<span class="nm">4</span> == <span class="nm">5</span>)  <span class="cm"># False</span></div>
+    </div>
+    <div class="out-box">True<br>False<br>True<br>False</div>
+  </div>
+  <div id="runner-3" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Keywords Playground!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-3')">🗑️</button><button class="run-btn" id="run-3" onclick="runCode('runner-3')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-3" spellcheck="false">print(10 > 5)
+print(3 == 3)
+print(True and False)
+print(True or False)</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-3"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 3 <span style="font-size:.75rem;color:var(--text2)">(+10 pts)</span></div>
+    <div class="qzq">✨ <code>print(10 == 10)</code> = ?</div>
+    <div class="qzopts" id="opts-Q3">
+      <button class="qopt" onclick="check(this,false,'Q3',0)">10</button>
+      <button class="qopt" onclick="check(this,true,'Q3',10)">True</button>
+      <button class="qopt" onclick="check(this,false,'Q3',0)">False</button>
+      <button class="qopt" onclick="check(this,false,'Q3',0)">Error</button>
+    </div>
+    <div class="qfb" id="fb-Q3"></div>
+  </div>
+</div>
+
+<!-- L4 — SEQUENCE -->
+<div class="lesson-card" data-lesson="4">
+  <div class="lt">📋 Sequence — "පිළිවෙල"</div>
+  <div class="ls">හතරවෙනි පාඩම · Top → Bottom!</div>
+  <div class="sb">
+    <div class="sbt">📋 Robot reads Top to Bottom!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'print(\"1. Robot on!\")\nprint(\"2. Water get\")\nprint(\"3. Water pour\")\nprint(\"4. Robot off!\")')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="fn">print</span>(<span class="st">"1. Robot on! 🤖"</span>)
+<span class="fn">print</span>(<span class="st">"2. ජල ගෙනා 💧"</span>)
+<span class="fn">print</span>(<span class="st">"3. ජල වරලා 🚿"</span>)
+<span class="fn">print</span>(<span class="st">"4. Robot off! 🔴"</span>)</div>
+    </div>
+    <div class="out-box">1. Robot on! 🤖<br>2. ජල ගෙනා 💧<br>3. ජල වරලා 🚿<br>4. Robot off! 🔴</div>
+  </div>
+  <!-- FLOWCHART: Sequence -->
+  <div class="flow-wrap">
+    <div class="flow-title">📊 Sequence Flowchart</div>
+    <svg class="flow" width="200" height="260" viewBox="0 0 200 260">
+      <defs><marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4d96ff"/></marker></defs>
+      <rect x="50" y="10" width="100" height="34" rx="17" fill="#4d96ff" opacity=".9"/>
+      <text x="100" y="32" text-anchor="middle" fill="#fff" font-size="11" font-family="Nunito">▶ Start</text>
+      <line x1="100" y1="44" x2="100" y2="60" stroke="#4d96ff" stroke-width="2" marker-end="url(#arr)"/>
+      <rect x="35" y="60" width="130" height="32" rx="6" fill="#1a1a3e" stroke="#6bcb77" stroke-width="1.5"/>
+      <text x="100" y="80" text-anchor="middle" fill="#6bcb77" font-size="10" font-family="Courier New">Step 1: print()</text>
+      <line x1="100" y1="92" x2="100" y2="108" stroke="#4d96ff" stroke-width="2" marker-end="url(#arr)"/>
+      <rect x="35" y="108" width="130" height="32" rx="6" fill="#1a1a3e" stroke="#6bcb77" stroke-width="1.5"/>
+      <text x="100" y="128" text-anchor="middle" fill="#6bcb77" font-size="10" font-family="Courier New">Step 2: print()</text>
+      <line x1="100" y1="140" x2="100" y2="156" stroke="#4d96ff" stroke-width="2" marker-end="url(#arr)"/>
+      <rect x="35" y="156" width="130" height="32" rx="6" fill="#1a1a3e" stroke="#6bcb77" stroke-width="1.5"/>
+      <text x="100" y="176" text-anchor="middle" fill="#6bcb77" font-size="10" font-family="Courier New">Step 3: print()</text>
+      <line x1="100" y1="188" x2="100" y2="210" stroke="#4d96ff" stroke-width="2" marker-end="url(#arr)"/>
+      <rect x="50" y="210" width="100" height="34" rx="17" fill="#ff6b6b" opacity=".9"/>
+      <text x="100" y="232" text-anchor="middle" fill="#fff" font-size="11" font-family="Nunito">⏹ End</text>
+    </svg>
+  </div>
+  <div id="runner-4" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Sequence Practice!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-4')">🗑️</button><button class="run-btn" id="run-4" onclick="runCode('runner-4')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-4" spellcheck="false">a = 5
+b = 3
+total = a + b
+print("Total:", total)
+print("Done!")</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-4"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 4 <span style="font-size:.75rem;color:var(--text2)">(+10 pts)</span></div>
+    <div class="qzq">✨ Python code run වෙන ක්‍රමය?</div>
+    <div class="qzopts" id="opts-Q4">
+      <button class="qopt" onclick="check(this,false,'Q4',0)">Random order</button>
+      <button class="qopt" onclick="check(this,true,'Q4',10)">ඉහළ සිට පහළට (line by line)</button>
+      <button class="qopt" onclick="check(this,false,'Q4',0)">පහළ සිට ඉහළට</button>
+      <button class="qopt" onclick="check(this,false,'Q4',0)">Robot decide</button>
+    </div>
+    <div class="qfb" id="fb-Q4"></div>
+  </div>
+</div>
+
+<!-- L5 — IF/ELSE -->
+<div class="lesson-card" data-lesson="5">
+  <div class="lt">🤔 If/Else — "තීරණ"</div>
+  <div class="ls">පස්වෙනි පාඩම · Selection / Decision!</div>
+  <!-- FLOWCHART: If/Else -->
+  <div class="flow-wrap">
+    <div class="flow-title">📊 If/Else Flowchart</div>
+    <svg class="flow" width="280" height="240" viewBox="0 0 280 240">
+      <defs><marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4d96ff"/></marker></defs>
+      <rect x="90" y="8" width="100" height="30" rx="15" fill="#4d96ff" opacity=".9"/>
+      <text x="140" y="28" text-anchor="middle" fill="#fff" font-size="11" font-family="Nunito">▶ Start</text>
+      <line x1="140" y1="38" x2="140" y2="60" stroke="#4d96ff" stroke-width="2" marker-end="url(#arr2)"/>
+      <polygon points="140,60 200,100 140,140 80,100" fill="#1a1a3e" stroke="#ffd93d" stroke-width="2"/>
+      <text x="140" y="97" text-anchor="middle" fill="#ffd93d" font-size="9.5" font-family="Nunito">condition</text>
+      <text x="140" y="110" text-anchor="middle" fill="#ffd93d" font-size="9" font-family="Nunito">True/False?</text>
+      <line x1="200" y1="100" x2="240" y2="100" stroke="#6bcb77" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="218" y="95" fill="#6bcb77" font-size="9" font-family="Nunito">True</text>
+      <rect x="240" y="84" width="36" height="32" rx="5" fill="#1a1a3e" stroke="#6bcb77" stroke-width="1.5"/>
+      <text x="258" y="101" text-anchor="middle" fill="#6bcb77" font-size="8.5" font-family="Courier New">if: ✅</text>
+      <line x1="80" y1="100" x2="40" y2="100" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="62" y="95" fill="#ff6b6b" font-size="9" font-family="Nunito">False</text>
+      <rect x="4" y="84" width="36" height="32" rx="5" fill="#1a1a3e" stroke="#ff6b6b" stroke-width="1.5"/>
+      <text x="22" y="101" text-anchor="middle" fill="#ff6b6b" font-size="8.5" font-family="Courier New">else:❌</text>
+      <line x1="258" y1="116" x2="258" y2="170" stroke="#4d96ff" stroke-width="1.5"/>
+      <line x1="22" y1="116" x2="22" y2="170" stroke="#4d96ff" stroke-width="1.5"/>
+      <line x1="22" y1="170" x2="258" y2="170" stroke="#4d96ff" stroke-width="1.5"/>
+      <line x1="140" y1="170" x2="140" y2="192" stroke="#4d96ff" stroke-width="2" marker-end="url(#arr2)"/>
+      <rect x="90" y="192" width="100" height="30" rx="15" fill="#ff6b6b" opacity=".9"/>
+      <text x="140" y="212" text-anchor="middle" fill="#fff" font-size="11" font-family="Nunito">⏹ End</text>
+    </svg>
+  </div>
+  <div class="sb g">
+    <div class="sbt">💻 If/Else Code!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'marks = 85\n\nif marks >= 90:\n    print(\"A Grade!\")\nelif marks >= 75:\n    print(\"B Grade!\")\nelif marks >= 60:\n    print(\"C Grade!\")\nelse:\n    print(\"Study more!\")')">✏️ Try it!</button></div>
+      <div class="code-block">marks = <span class="nm">85</span>
+
+<span class="kw">if</span> marks >= <span class="nm">90</span>:
+    <span class="fn">print</span>(<span class="st">"🥇 A Grade!"</span>)
+<span class="kw">elif</span> marks >= <span class="nm">75</span>:
+    <span class="fn">print</span>(<span class="st">"🥈 B Grade!"</span>)
+<span class="kw">elif</span> marks >= <span class="nm">60</span>:
+    <span class="fn">print</span>(<span class="st">"🥉 C Grade!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="st">"📚 Study more!"</span>)</div>
+    </div>
+    <div class="out-box">🥈 B Grade!</div>
+  </div>
+  <div id="runner-5" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 If/Else Playground!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-5')">🗑️</button><button class="run-btn" id="run-5" onclick="runCode('runner-5')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-5" spellcheck="false">age = 15
+
+if age >= 18:
+    print("Adult 🧑")
+else:
+    print("Child 👦")
+
+# marks වෙනස් කරලා try කරන්න!
+score = 70
+if score >= 50:
+    print("Pass ✅")
+else:
+    print("Fail ❌")</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-5"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 5 <span style="font-size:.75rem;color:var(--text2)">(+10 pts)</span></div>
+    <div class="qzq">✨ <code>age=8</code> → if age≥18: "Adult" else: "Child" = ?</div>
+    <div class="qzopts" id="opts-Q5">
+      <button class="qopt" onclick="check(this,false,'Q5',0)">Adult</button>
+      <button class="qopt" onclick="check(this,true,'Q5',10)">Child</button>
+      <button class="qopt" onclick="check(this,false,'Q5',0)">8</button>
+      <button class="qopt" onclick="check(this,false,'Q5',0)">Error</button>
+    </div>
+    <div class="qfb" id="fb-Q5"></div>
+  </div>
+</div>
+
+<!-- L6 — LOOPS -->
+<div class="lesson-card" data-lesson="6">
+  <div class="lt">🔁 Loops — "නැවත නැවත!"</div>
+  <div class="ls">හයවෙනි පාඩම · Repeat Power!</div>
+  <!-- FLOWCHART: Loop -->
+  <div class="flow-wrap">
+    <div class="flow-title">📊 For Loop Flowchart</div>
+    <svg class="flow" width="220" height="280" viewBox="0 0 220 280">
+      <defs><marker id="arr3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4d96ff"/></marker></defs>
+      <rect x="60" y="8" width="100" height="30" rx="15" fill="#4d96ff" opacity=".9"/>
+      <text x="110" y="28" text-anchor="middle" fill="#fff" font-size="11" font-family="Nunito">▶ Start</text>
+      <line x1="110" y1="38" x2="110" y2="56" stroke="#4d96ff" stroke-width="2" marker-end="url(#arr3)"/>
+      <rect x="30" y="56" width="160" height="30" rx="6" fill="#1a1a3e" stroke="#ffd93d" stroke-width="1.5"/>
+      <text x="110" y="76" text-anchor="middle" fill="#ffd93d" font-size="9.5" font-family="Courier New">i = 0  (initialize)</text>
+      <line x1="110" y1="86" x2="110" y2="104" stroke="#4d96ff" stroke-width="2" marker-end="url(#arr3)"/>
+      <polygon points="110,104 175,136 110,168 45,136" fill="#1a1a3e" stroke="#ffd93d" stroke-width="2"/>
+      <text x="110" y="133" text-anchor="middle" fill="#ffd93d" font-size="9" font-family="Nunito">i &lt; 5</text>
+      <text x="110" y="146" text-anchor="middle" fill="#ffd93d" font-size="9" font-family="Nunito">True?</text>
+      <line x1="175" y1="136" x2="200" y2="136" stroke="#6bcb77" stroke-width="2"/>
+      <text x="182" y="130" fill="#6bcb77" font-size="8.5" font-family="Nunito">✅ Yes</text>
+      <line x1="200" y1="136" x2="200" y2="192" stroke="#6bcb77" stroke-width="2"/>
+      <rect x="155" y="192" width="50" height="28" rx="5" fill="#1a1a3e" stroke="#6bcb77" stroke-width="1.5"/>
+      <text x="180" y="210" text-anchor="middle" fill="#6bcb77" font-size="8.5" font-family="Courier New">print(i)</text>
+      <line x1="180" y1="220" x2="180" y2="240" stroke="#6bcb77" stroke-width="2"/>
+      <rect x="150" y="240" width="60" height="22" rx="5" fill="#1a1a3e" stroke="#c77dff" stroke-width="1.5"/>
+      <text x="180" y="255" text-anchor="middle" fill="#c77dff" font-size="8.5" font-family="Courier New">i = i+1</text>
+      <line x1="150" y1="251" x2="30" y2="251" stroke="#c77dff" stroke-width="1.5"/>
+      <line x1="30" y1="251" x2="30" y2="120" stroke="#c77dff" stroke-width="1.5"/>
+      <line x1="30" y1="120" x2="45" y2="136" stroke="#c77dff" stroke-width="2" marker-end="url(#arr3)"/>
+      <text x="18" y="190" fill="#c77dff" font-size="8" font-family="Nunito">↑ Loop</text>
+      <line x1="45" y1="136" x2="18" y2="136" stroke="#ff6b6b" stroke-width="2"/>
+      <text x="6" y="131" fill="#ff6b6b" font-size="8.5" font-family="Nunito">❌No</text>
+      <line x1="18" y1="136" x2="18" y2="265" stroke="#ff6b6b" stroke-width="1.5"/>
+      <line x1="18" y1="265" x2="60" y2="265" stroke="#ff6b6b" stroke-width="2" marker-end="url(#arr3)"/>
+      <rect x="60" y="252" width="100" height="28" rx="14" fill="#ff6b6b" opacity=".9"/>
+      <text x="110" y="270" text-anchor="middle" fill="#fff" font-size="11" font-family="Nunito">⏹ Done!</text>
+    </svg>
+  </div>
+  <div class="sb g">
+    <div class="sbt">💻 For Loop!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'for i in range(5):\n    print(\"Hello!\", i)\n\nfruits = [\"Apple\",\"Mango\",\"Banana\"]\nfor fruit in fruits:\n    print(fruit)')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">5</span>):
+    <span class="fn">print</span>(<span class="st">"Hello!"</span>, i)
+
+fruits = [<span class="st">"Apple"</span>, <span class="st">"Mango"</span>, <span class="st">"Banana"</span>]
+<span class="kw">for</span> fruit <span class="kw">in</span> fruits:
+    <span class="fn">print</span>(fruit)</div>
+    </div>
+    <div class="out-box">Hello! 0<br>Hello! 1<br>Hello! 2<br>Hello! 3<br>Hello! 4<br>Apple<br>Mango<br>Banana</div>
+  </div>
+  <div id="runner-6" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Loop Playground!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-6')">🗑️</button><button class="run-btn" id="run-6" onclick="runCode('runner-6')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-6" spellcheck="false"># Stars pattern!
+for i in range(1, 6):
+    print("⭐" * i)
+
+# 1 to 10
+print("--- Numbers ---")
+for n in range(1, 11):
+    print(n, end=" ")
+print()</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-6"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 6 <span style="font-size:.75rem;color:var(--text2)">(+10 pts)</span></div>
+    <div class="qzq">✨ <code>for i in range(3): print("Hi")</code> — "Hi" කී වතාවක්?</div>
+    <div class="qzopts" id="opts-Q6">
+      <button class="qopt" onclick="check(this,false,'Q6',0)">1</button>
+      <button class="qopt" onclick="check(this,false,'Q6',0)">2</button>
+      <button class="qopt" onclick="check(this,true,'Q6',10)">3</button>
+      <button class="qopt" onclick="check(this,false,'Q6',0)">4</button>
+    </div>
+    <div class="qfb" id="fb-Q6"></div>
+  </div>
+</div>
+
+<!-- L7 — FUNCTIONS -->
+<div class="lesson-card" data-lesson="7">
+  <div class="lt">🧩 Functions — "Robot Skills"</div>
+  <div class="ls">හත්වෙනි පාඩම · Reusable Code!</div>
+  <div class="sb">
+    <div class="sbt">🧩 def = Function හදමු!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'def greet(name):\n    print(f\"Hello, {name}!\")\n\ngreet(\"Kasun\")\ngreet(\"Nimal\")\ngreet(\"Amali\")')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="fn">print</span>(<span class="st">f"Hello, {name}! 🎉"</span>)
+
+<span class="fn">greet</span>(<span class="st">"Kasun"</span>)
+<span class="fn">greet</span>(<span class="st">"Nimal"</span>)</div>
+    </div>
+    <div class="out-box">Hello, Kasun! 🎉<br>Hello, Nimal! 🎉</div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">↩️ return — Answer ලබාගමු!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'def add(a, b):\n    return a + b\n\nprint(add(10, 5))\nprint(add(3, 7))\nprint(add(100, 200))')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">def</span> <span class="fn">add</span>(a, b):
+    <span class="kw">return</span> a + b
+
+<span class="fn">print</span>(<span class="fn">add</span>(<span class="nm">10</span>, <span class="nm">5</span>))    <span class="cm"># 15</span>
+<span class="fn">print</span>(<span class="fn">add</span>(<span class="nm">3</span>,  <span class="nm">7</span>))    <span class="cm"># 10</span>
+<span class="fn">print</span>(<span class="fn">add</span>(<span class="nm">100</span>, <span class="nm">200</span>)) <span class="cm"># 300</span></div>
+    </div>
+    <div class="out-box">15<br>10<br>300</div>
+  </div>
+  <div id="runner-7" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Functions Playground!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-7')">🗑️</button><button class="run-btn" id="run-7" onclick="runCode('runner-7')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-7" spellcheck="false">def square(n):
+    return n * n
+
+def is_even(n):
+    if n % 2 == 0:
+        return "ඉරට"
+    else:
+        return "ඔත"
+
+print(square(5))
+print(square(10))
+print(is_even(4))
+print(is_even(7))</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-7"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 7 <span style="font-size:.75rem;color:var(--text2)">(+15 pts)</span></div>
+    <div class="qzq">✨ Function define keyword?</div>
+    <div class="qzopts" id="opts-Q7">
+      <button class="qopt" onclick="check(this,false,'Q7',0)">function</button>
+      <button class="qopt" onclick="check(this,true,'Q7',15)">def</button>
+      <button class="qopt" onclick="check(this,false,'Q7',0)">func</button>
+      <button class="qopt" onclick="check(this,false,'Q7',0)">create</button>
+    </div>
+    <div class="qfb" id="fb-Q7"></div>
+  </div>
+</div>
+
+<!-- L8 — LISTS & DICTS -->
+<div class="lesson-card" data-lesson="8">
+  <div class="lt">📚 Lists & Dicts</div>
+  <div class="ls">අට්වෙනි පාඩම · Collections!</div>
+  <div class="sb">
+    <div class="sbt">📚 List = Shopping Bag!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'fruits = [\"Apple\",\"Mango\",\"Banana\"]\nprint(fruits[0])\nfruits.append(\"Papaya\")\nprint(fruits)\nprint(len(fruits))')">✏️ Try it!</button></div>
+      <div class="code-block">fruits = [<span class="st">"Apple"</span>, <span class="st">"Mango"</span>, <span class="st">"Banana"</span>]
+<span class="fn">print</span>(fruits[<span class="nm">0</span>])   <span class="cm"># Apple</span>
+fruits.<span class="fn">append</span>(<span class="st">"Papaya"</span>)
+<span class="fn">print</span>(fruits)
+<span class="fn">print</span>(<span class="fn">len</span>(fruits))  <span class="cm"># 4</span></div>
+    </div>
+    <div class="out-box">Apple<br>['Apple', 'Mango', 'Banana', 'Papaya']<br>4</div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">📖 Dictionary!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'student = {\"name\": \"Kasun\", \"age\": 14, \"grade\": \"A\"}\nprint(student[\"name\"])\nfor k, v in student.items():\n    print(k, \":\", v)')">✏️ Try it!</button></div>
+      <div class="code-block">student = {
+    <span class="st">"name"</span> : <span class="st">"Kasun"</span>,
+    <span class="st">"age"</span>  : <span class="nm">14</span>,
+    <span class="st">"grade"</span>: <span class="st">"A"</span>
+}
+<span class="fn">print</span>(student[<span class="st">"name"</span>])
+<span class="kw">for</span> k, v <span class="kw">in</span> student.<span class="fn">items</span>():
+    <span class="fn">print</span>(k, <span class="st">":"</span>, v)</div>
+    </div>
+    <div class="out-box">Kasun<br>name : Kasun<br>age : 14<br>grade : A</div>
+  </div>
+  <div id="runner-8" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Collections!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-8')">🗑️</button><button class="run-btn" id="run-8" onclick="runCode('runner-8')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-8" spellcheck="false">scores = [85, 72, 91, 60, 78]
+total = sum(scores)
+avg = total / len(scores)
+print("Average:", avg)
+print("Best:", max(scores))
+print("Worst:", min(scores))</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-8"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 8 <span style="font-size:.75rem;color:var(--text2)">(+15 pts)</span></div>
+    <div class="qzq">✨ <code>nums=[5,10,15]</code> → <code>print(nums[1])</code> = ?</div>
+    <div class="qzopts" id="opts-Q8">
+      <button class="qopt" onclick="check(this,false,'Q8',0)">5</button>
+      <button class="qopt" onclick="check(this,true,'Q8',15)">10</button>
+      <button class="qopt" onclick="check(this,false,'Q8',0)">15</button>
+      <button class="qopt" onclick="check(this,false,'Q8',0)">1</button>
+    </div>
+    <div class="qfb" id="fb-Q8"></div>
+  </div>
+</div>
+
+<!-- L9 — STRINGS -->
+<div class="lesson-card" data-lesson="9">
+  <div class="lt">🔤 Strings Advanced</div>
+  <div class="ls">නවවෙනි පාඩම · Text Magic!</div>
+  <div class="sb">
+    <div class="sbt">🔤 String Methods!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'name = \"python programming\"\nprint(name.upper())\nprint(name.title())\nprint(len(name))\nprint(name.replace(\"python\",\"java\"))')">✏️ Try it!</button></div>
+      <div class="code-block">name = <span class="st">"python programming"</span>
+<span class="fn">print</span>(name.<span class="fn">upper</span>())
+<span class="fn">print</span>(name.<span class="fn">title</span>())
+<span class="fn">print</span>(<span class="fn">len</span>(name))
+<span class="fn">print</span>(name.<span class="fn">replace</span>(<span class="st">"python"</span>, <span class="st">"java"</span>))</div>
+    </div>
+    <div class="out-box">PYTHON PROGRAMMING<br>Python Programming<br>18<br>java programming</div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">🎨 f-Strings & Slicing!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'name = \"Kasun\"\nage = 14\nprint(f\"Hello {name}, age {age}\")\nword = \"Python\"\nprint(word[0:3])\nprint(word[::-1])')">✏️ Try it!</button></div>
+      <div class="code-block">name = <span class="st">"Kasun"</span>
+age  = <span class="nm">14</span>
+<span class="fn">print</span>(<span class="st">f"Hello {name}, age {age}"</span>)
+
+word = <span class="st">"Python"</span>
+<span class="fn">print</span>(word[<span class="nm">0</span>:<span class="nm">3</span>])   <span class="cm"># Pyt</span>
+<span class="fn">print</span>(word[::-<span class="nm">1</span>])  <span class="cm"># nohtyP</span></div>
+    </div>
+    <div class="out-box">Hello Kasun, age 14<br>Pyt<br>nohtyP</div>
+  </div>
+  <div id="runner-9" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 String Magic!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-9')">🗑️</button><button class="run-btn" id="run-9" onclick="runCode('runner-9')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-9" spellcheck="false">sentence = "Python is awesome"
+words = sentence.split()
+print("Words:", words)
+print("Count:", len(words))
+print("Upper:", sentence.upper())
+print("Has 'Python':", "Python" in sentence)</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-9"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 9 <span style="font-size:.75rem;color:var(--text2)">(+15 pts)</span></div>
+    <div class="qzq">✨ <code>"hello".upper()</code> = ?</div>
+    <div class="qzopts" id="opts-Q9">
+      <button class="qopt" onclick="check(this,false,'Q9',0)">hello</button>
+      <button class="qopt" onclick="check(this,true,'Q9',15)">HELLO</button>
+      <button class="qopt" onclick="check(this,false,'Q9',0)">Hello</button>
+      <button class="qopt" onclick="check(this,false,'Q9',0)">Error</button>
+    </div>
+    <div class="qfb" id="fb-Q9"></div>
+  </div>
+</div>
+
+<!-- L10 — OOP CLASSES -->
+<div class="lesson-card" data-lesson="10">
+  <div class="lt">🏗️ OOP — Classes & Objects</div>
+  <div class="ls">දහවෙනි පාඩම · Object-Oriented Programming!</div>
+  <div class="sb">
+    <div class="sbt">🧸 Class = Blueprint! Object = Real Thing!</div>
+    <p style="font-size:.85rem;line-height:1.8;margin-bottom:10px;">
+      <strong style="color:var(--a2)">Class</strong> = "සෙල්ලම් බඩු හදන නිර්දේශය" 📐<br>
+      <strong style="color:var(--a3)">Object</strong> = "ඒ නිර්දේශයෙන් හදපු actual බඩුව" 🧸
+    </p>
+    <!-- CLASS DIAGRAM -->
+    <div class="class-diagram">
+      <div class="cd-header">🐕 class Dog</div>
+      <div class="cd-section">
+        <div style="font-size:.72rem;color:var(--text2);margin-bottom:3px;">📦 Attributes (Properties):</div>
+        <div class="cd-attr">• name: str</div>
+        <div class="cd-attr">• breed: str</div>
+        <div class="cd-attr">• age: int</div>
+      </div>
+      <div class="cd-section">
+        <div style="font-size:.72rem;color:var(--text2);margin-bottom:3px;">⚙️ Methods (Actions):</div>
+        <div class="cd-method">• bark() → "Woof!"</div>
+        <div class="cd-method">• fetch() → "Fetching!"</div>
+      </div>
+    </div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">💻 Class Code!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'class Dog:\n    def __init__(self, name, breed):\n        self.name = name\n        self.breed = breed\n\n    def bark(self):\n        print(f\"{self.name}: Woof! 🐕\")\n\n    def info(self):\n        print(f\"Dog: {self.name}, Breed: {self.breed}\")\n\ndog1 = Dog(\"Buddy\", \"Labrador\")\ndog2 = Dog(\"Max\", \"Poodle\")\n\ndog1.bark()\ndog2.bark()\ndog1.info()')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">class</span> <span class="cl">Dog</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, name, breed):
+        self.name  = name
+        self.breed = breed
+
+    <span class="kw">def</span> <span class="fn">bark</span>(self):
+        <span class="fn">print</span>(<span class="st">f"{self.name}: Woof! 🐕"</span>)
+
+    <span class="kw">def</span> <span class="fn">info</span>(self):
+        <span class="fn">print</span>(<span class="st">f"Dog: {self.name}, Breed: {self.breed}"</span>)
+
+dog1 = <span class="cl">Dog</span>(<span class="st">"Buddy"</span>, <span class="st">"Labrador"</span>)
+dog2 = <span class="cl">Dog</span>(<span class="st">"Max"</span>, <span class="st">"Poodle"</span>)
+dog1.<span class="fn">bark</span>()
+dog2.<span class="fn">bark</span>()
+dog1.<span class="fn">info</span>()</div>
+    </div>
+    <div class="out-box">Buddy: Woof! 🐕<br>Max: Woof! 🐕<br>Dog: Buddy, Breed: Labrador</div>
+  </div>
+  <div class="sb y">
+    <div class="sbt">🎮 Game Character Class!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'class Hero:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp   = hp\n\n    def attack(self, damage):\n        self.hp -= damage\n        print(f\"{self.name} attacked! HP left: {self.hp}\")\n\n    def heal(self, amount):\n        self.hp += amount\n        print(f\"{self.name} healed! HP: {self.hp}\")\n\nhero = Hero(\"Kasun\", 100)\nhero.attack(20)\nhero.attack(15)\nhero.heal(30)')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">class</span> <span class="cl">Hero</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, name, hp):
+        self.name = name
+        self.hp   = hp
+
+    <span class="kw">def</span> <span class="fn">attack</span>(self, damage):
+        self.hp -= damage
+        <span class="fn">print</span>(<span class="st">f"{self.name} HP left: {self.hp}"</span>)
+
+    <span class="kw">def</span> <span class="fn">heal</span>(self, amount):
+        self.hp += amount
+        <span class="fn">print</span>(<span class="st">f"{self.name} healed: {self.hp}"</span>)
+
+hero = <span class="cl">Hero</span>(<span class="st">"Kasun"</span>, <span class="nm">100</span>)
+hero.<span class="fn">attack</span>(<span class="nm">20</span>)
+hero.<span class="fn">heal</span>(<span class="nm">30</span>)</div>
+    </div>
+    <div class="out-box">Kasun HP left: 80<br>Kasun healed: 110</div>
+  </div>
+  <div id="runner-10" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 OOP Playground — ඔයාගේ own class හදන්න!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-10')">🗑️</button><button class="run-btn" id="run-10" onclick="runCode('runner-10')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-10" spellcheck="false">class Car:
+    def __init__(self, brand, speed):
+        self.brand = brand
+        self.speed = speed
+    
+    def drive(self):
+        print(f"{self.brand} is driving at {self.speed} km/h! 🚗")
+    
+    def boost(self):
+        self.speed += 20
+        print(f"Boosted! Now {self.speed} km/h! 🏎️")
+
+car1 = Car("Toyota", 80)
+car2 = Car("BMW", 120)
+
+car1.drive()
+car1.boost()
+car1.drive()
+car2.drive()</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-10"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 10 <span style="font-size:.75rem;color:var(--text2)">(+20 pts)</span></div>
+    <div class="qzq">✨ Python class define keyword?</div>
+    <div class="qzopts" id="opts-Q10">
+      <button class="qopt" onclick="check(this,false,'Q10',0)">object</button>
+      <button class="qopt" onclick="check(this,false,'Q10',0)">def</button>
+      <button class="qopt" onclick="check(this,true,'Q10',20)">class</button>
+      <button class="qopt" onclick="check(this,false,'Q10',0)">new</button>
+    </div>
+    <div class="qfb" id="fb-Q10"></div>
+  </div>
+</div>
+
+<!-- L11 — INHERITANCE -->
+<div class="lesson-card" data-lesson="11">
+  <div class="lt">👨‍👩‍👧 Inheritance — "දෙමාපිය Class"</div>
+  <div class="ls">එකොළොස්වෙනි පාඩම · Advanced OOP!</div>
+  <div class="sb">
+    <div class="sbt">🧬 Inheritance = Properties inherit!</div>
+    <p style="font-size:.85rem;line-height:1.8;margin-bottom:10px;">
+      Parent class ලෙසින් properties සහ methods child class ට inherit කරගන්නවා! 
+      <strong style="color:var(--a2)">Animal → Dog, Cat</strong>
+    </p>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'class Animal:\n    def __init__(self, name):\n        self.name = name\n\n    def eat(self):\n        print(f\"{self.name} is eating 🍖\")\n\nclass Dog(Animal):\n    def bark(self):\n        print(f\"{self.name}: Woof! 🐕\")\n\nclass Cat(Animal):\n    def meow(self):\n        print(f\"{self.name}: Meow! 🐱\")\n\ndog = Dog(\"Rex\")\ncat = Cat(\"Luna\")\n\ndog.eat()   # from Animal\ndog.bark()  # from Dog\ncat.eat()   # from Animal\ncat.meow()  # from Cat')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">class</span> <span class="cl">Animal</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, name):
+        self.name = name
+    <span class="kw">def</span> <span class="fn">eat</span>(self):
+        <span class="fn">print</span>(<span class="st">f"{self.name} is eating 🍖"</span>)
+
+<span class="kw">class</span> <span class="cl">Dog</span>(<span class="cl">Animal</span>):   <span class="cm"># inherits Animal</span>
+    <span class="kw">def</span> <span class="fn">bark</span>(self):
+        <span class="fn">print</span>(<span class="st">f"{self.name}: Woof! 🐕"</span>)
+
+<span class="kw">class</span> <span class="cl">Cat</span>(<span class="cl">Animal</span>):   <span class="cm"># inherits Animal</span>
+    <span class="kw">def</span> <span class="fn">meow</span>(self):
+        <span class="fn">print</span>(<span class="st">f"{self.name}: Meow! 🐱"</span>)
+
+dog = <span class="cl">Dog</span>(<span class="st">"Rex"</span>)
+cat = <span class="cl">Cat</span>(<span class="st">"Luna"</span>)
+dog.<span class="fn">eat</span>()   <span class="cm"># Animal method!</span>
+dog.<span class="fn">bark</span>()  <span class="cm"># Dog method!</span>
+cat.<span class="fn">meow</span>()</div>
+    </div>
+    <div class="out-box">Rex is eating 🍖<br>Rex: Woof! 🐕<br>Luna: Meow! 🐱</div>
+  </div>
+  <div id="runner-11" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Inheritance Playground!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-11')">🗑️</button><button class="run-btn" id="run-11" onclick="runCode('runner-11')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-11" spellcheck="false">class Shape:
+    def __init__(self, color):
+        self.color = color
+    
+    def describe(self):
+        print(f"I am a {self.color} shape")
+
+class Circle(Shape):
+    def __init__(self, color, radius):
+        super().__init__(color)
+        self.radius = radius
+    
+    def area(self):
+        return 3.14 * self.radius ** 2
+
+class Rectangle(Shape):
+    def __init__(self, color, w, h):
+        super().__init__(color)
+        self.w, self.h = w, h
+    
+    def area(self):
+        return self.w * self.h
+
+c = Circle("red", 5)
+r = Rectangle("blue", 4, 6)
+
+c.describe()
+print("Circle area:", c.area())
+r.describe()
+print("Rectangle area:", r.area())</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-11"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 11 <span style="font-size:.75rem;color:var(--text2)">(+20 pts)</span></div>
+    <div class="qzq">✨ Child class inherit keyword (e.g. <code>class Dog(???)</code>)?</div>
+    <div class="qzopts" id="opts-Q11">
+      <button class="qopt" onclick="check(this,false,'Q11',0)">inherit Animal</button>
+      <button class="qopt" onclick="check(this,true,'Q11',20)">Animal (parentheses ලෙස)</button>
+      <button class="qopt" onclick="check(this,false,'Q11',0)">extends Animal</button>
+      <button class="qopt" onclick="check(this,false,'Q11',0)">from Animal</button>
+    </div>
+    <div class="qfb" id="fb-Q11"></div>
+  </div>
+</div>
+
+<!-- L12 — FILE HANDLING -->
+<div class="lesson-card" data-lesson="12">
+  <div class="lt">📁 File Handling</div>
+  <div class="ls">දොළොස්වෙනි පාඩම · Files Read/Write!</div>
+  <div class="sb">
+    <div class="sbt">📁 File Operations!</div>
+    <p style="font-size:.85rem;line-height:1.8;margin-bottom:10px;">Python ට computer files read/write කළ හැකිය! 📄</p>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button></div>
+      <div class="code-block"><span class="cm"># File WRITE</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"notes.txt"</span>, <span class="st">"w"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="st">"Hello Python!\n"</span>)
+    f.<span class="fn">write</span>(<span class="st">"Second line\n"</span>)
+
+<span class="cm"># File READ</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"notes.txt"</span>, <span class="st">"r"</span>) <span class="kw">as</span> f:
+    content = f.<span class="fn">read</span>()
+    <span class="fn">print</span>(content)
+
+<span class="cm"># File APPEND</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"notes.txt"</span>, <span class="st">"a"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="st">"New line added!\n"</span>)</div>
+    </div>
+  </div>
+  <div class="hl"><div class="hli">📌</div><div class="hlt"><strong style="color:var(--a2)">File modes:</strong><br>"w" = Write (new) · "r" = Read · "a" = Append (add) · "with" = Auto close!</div></div>
+  <div id="runner-12" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 File Handling — Browser Memory ලෙස!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-12')">🗑️</button><button class="run-btn" id="run-12" onclick="runCode('runner-12')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-12" spellcheck="false"># Browser ලෙස file simulation
+import io
+
+# Write to "virtual file"
+virtual_file = io.StringIO()
+virtual_file.write("Line 1: Python rocks!\n")
+virtual_file.write("Line 2: Files are cool!\n")
+virtual_file.write("Line 3: I am learning!\n")
+
+# Read back
+virtual_file.seek(0)
+content = virtual_file.read()
+print("=== File Content ===")
+print(content)
+
+# Line by line
+virtual_file.seek(0)
+lines = virtual_file.readlines()
+print(f"Total lines: {len(lines)}")
+for i, line in enumerate(lines, 1):
+    print(f"Line {i}:", line.strip())</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-12"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 12 <span style="font-size:.75rem;color:var(--text2)">(+20 pts)</span></div>
+    <div class="qzq">✨ File read කරන mode?</div>
+    <div class="qzopts" id="opts-Q12">
+      <button class="qopt" onclick="check(this,false,'Q12',0)">"w"</button>
+      <button class="qopt" onclick="check(this,true,'Q12',20)">"r"</button>
+      <button class="qopt" onclick="check(this,false,'Q12',0)">"a"</button>
+      <button class="qopt" onclick="check(this,false,'Q12',0)">"x"</button>
+    </div>
+    <div class="qfb" id="fb-Q12"></div>
+  </div>
+</div>
+
+<!-- L13 — LIBRARIES: math & random -->
+<div class="lesson-card" data-lesson="13">
+  <div class="lt">📦 Libraries — "Super Powers!"</div>
+  <div class="ls">දහතෙවෙනි පාඩම · Built-in Libraries!</div>
+  <div class="sb">
+    <div class="sbt">📚 Popular Built-in Libraries!</div>
+    <div class="lib-grid">
+      <div class="lib-card"><div class="lib-em">🔢</div><div class="lib-name">math</div><div class="lib-use">Advanced maths: sqrt, pi, floor</div></div>
+      <div class="lib-card"><div class="lib-em">🎲</div><div class="lib-name">random</div><div class="lib-use">Random numbers & choices</div></div>
+      <div class="lib-card"><div class="lib-em">🕐</div><div class="lib-name">datetime</div><div class="lib-use">Date and time operations</div></div>
+      <div class="lib-card"><div class="lib-em">📁</div><div class="lib-name">os</div><div class="lib-use">File system operations</div></div>
+      <div class="lib-card"><div class="lib-em">🌐</div><div class="lib-name">json</div><div class="lib-use">JSON data handling</div></div>
+      <div class="lib-card"><div class="lib-em">🔢</div><div class="lib-name">statistics</div><div class="lib-use">Mean, median, mode</div></div>
+    </div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">🔢 math Library!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'import math\n\nprint(math.sqrt(25))\nprint(math.pi)\nprint(math.floor(3.7))\nprint(math.ceil(3.2))\nprint(math.pow(2, 10))')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">import</span> math
+
+<span class="fn">print</span>(math.<span class="fn">sqrt</span>(<span class="nm">25</span>))    <span class="cm"># 5.0</span>
+<span class="fn">print</span>(math.pi)          <span class="cm"># 3.14159...</span>
+<span class="fn">print</span>(math.<span class="fn">floor</span>(<span class="nm">3.7</span>)) <span class="cm"># 3</span>
+<span class="fn">print</span>(math.<span class="fn">pow</span>(<span class="nm">2</span>, <span class="nm">10</span>))  <span class="cm"># 1024.0</span></div>
+    </div>
+    <div class="out-box">5.0<br>3.141592653589793<br>3<br>1024.0</div>
+  </div>
+  <div class="sb y">
+    <div class="sbt">🎲 random Library!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'import random\n\nprint(random.randint(1, 10))\nprint(random.random())\n\nfruits = [\"Apple\",\"Mango\",\"Banana\",\"Papaya\"]\nprint(random.choice(fruits))\n\nnumbers = list(range(1, 11))\nrandom.shuffle(numbers)\nprint(numbers)')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">import</span> random
+
+<span class="fn">print</span>(random.<span class="fn">randint</span>(<span class="nm">1</span>, <span class="nm">10</span>))
+<span class="fn">print</span>(random.<span class="fn">random</span>())
+
+fruits = [<span class="st">"Apple"</span>, <span class="st">"Mango"</span>, <span class="st">"Banana"</span>]
+<span class="fn">print</span>(random.<span class="fn">choice</span>(fruits))
+
+nums = <span class="fn">list</span>(<span class="fn">range</span>(<span class="nm">1</span>, <span class="nm">6</span>))
+random.<span class="fn">shuffle</span>(nums)
+<span class="fn">print</span>(nums)</div>
+    </div>
+    <div class="out-box">7 (random!)<br>0.4213... (random!)<br>Mango (random!)<br>[3, 1, 5, 2, 4] (random!)</div>
+  </div>
+  <div id="runner-13" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Libraries Playground!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-13')">🗑️</button><button class="run-btn" id="run-13" onclick="runCode('runner-13')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-13" spellcheck="false">import math
+import random
+
+# Number Guessing Game simulation!
+secret = random.randint(1, 10)
+print(f"Secret number is... {secret}!")
+
+# Math tricks
+print(f"Pi = {math.pi:.4f}")
+print(f"sqrt(144) = {math.sqrt(144)}")
+
+# Random team picker
+team = ["Kasun", "Nimal", "Amali", "Sunil", "Kavya"]
+print(f"\nToday's leader: {random.choice(team)}!")
+random.shuffle(team)
+print(f"Team order: {team}")</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-13"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 13 <span style="font-size:.75rem;color:var(--text2)">(+20 pts)</span></div>
+    <div class="qzq">✨ Library import keyword?</div>
+    <div class="qzopts" id="opts-Q13">
+      <button class="qopt" onclick="check(this,false,'Q13',0)">include</button>
+      <button class="qopt" onclick="check(this,false,'Q13',0)">use</button>
+      <button class="qopt" onclick="check(this,true,'Q13',20)">import</button>
+      <button class="qopt" onclick="check(this,false,'Q13',0)">load</button>
+    </div>
+    <div class="qfb" id="fb-Q13"></div>
+  </div>
+</div>
+
+<!-- L14 — ERROR HANDLING -->
+<div class="lesson-card" data-lesson="14">
+  <div class="lt">🛡️ Error Handling — try/except</div>
+  <div class="ls">දහහතරවෙනි පාඩම · Errors Handle!</div>
+  <div class="sb">
+    <div class="sbt">🛡️ try/except = Error Catcher!</div>
+    <p style="font-size:.85rem;line-height:1.8;margin-bottom:9px;">Program crash නොවෙලා errors catch කරගන්නවා! 🪤</p>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'try:\n    num = int(\"hello\")  # Error!\n    print(num)\nexcept ValueError:\n    print(\"Error: That is not a number!\")\nfinally:\n    print(\"This always runs!\")')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">try</span>:
+    num = <span class="fn">int</span>(<span class="st">"hello"</span>)  <span class="cm"># ValueError!</span>
+    <span class="fn">print</span>(num)
+<span class="kw">except</span> <span class="cl">ValueError</span>:
+    <span class="fn">print</span>(<span class="st">"Error: Number නෙමෙයි!"</span>)
+<span class="kw">finally</span>:
+    <span class="fn">print</span>(<span class="st">"සැමතිස්සෙම run වෙනවා!"</span>)</div>
+    </div>
+    <div class="out-box">Error: Number නෙමෙයි!<br>සැමතිස්සෙම run වෙනවා!</div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">🔢 Division Error Catch!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'def safe_divide(a, b):\n    try:\n        result = a / b\n        return result\n    except ZeroDivisionError:\n        return \"Error: 0 නෙන් බෙදන්නෑ!\"\n\nprint(safe_divide(10, 2))\nprint(safe_divide(5, 0))\nprint(safe_divide(100, 4))')">✏️ Try it!</button></div>
+      <div class="code-block"><span class="kw">def</span> <span class="fn">safe_divide</span>(a, b):
+    <span class="kw">try</span>:
+        <span class="kw">return</span> a / b
+    <span class="kw">except</span> <span class="cl">ZeroDivisionError</span>:
+        <span class="kw">return</span> <span class="st">"Error: 0 නෙන් බෙදන්නෑ!"</span>
+
+<span class="fn">print</span>(<span class="fn">safe_divide</span>(<span class="nm">10</span>, <span class="nm">2</span>))
+<span class="fn">print</span>(<span class="fn">safe_divide</span>(<span class="nm">5</span>, <span class="nm">0</span>))
+<span class="fn">print</span>(<span class="fn">safe_divide</span>(<span class="nm">100</span>, <span class="nm">4</span>))</div>
+    </div>
+    <div class="out-box">5.0<br>Error: 0 නෙන් බෙදන්නෑ!<br>25.0</div>
+  </div>
+  <div id="runner-14" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Error Handling Practice!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-14')">🗑️</button><button class="run-btn" id="run-14" onclick="runCode('runner-14')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-14" spellcheck="false">numbers = [10, 0, 5, 0, 2]
+
+for n in numbers:
+    try:
+        result = 100 / n
+        print(f"100 / {n} = {result:.1f}")
+    except ZeroDivisionError:
+        print(f"100 / {n} = Cannot divide by zero! ⚠️")</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-14"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 14 <span style="font-size:.75rem;color:var(--text2)">(+20 pts)</span></div>
+    <div class="qzq">✨ Error catch keyword?</div>
+    <div class="qzopts" id="opts-Q14">
+      <button class="qopt" onclick="check(this,false,'Q14',0)">catch</button>
+      <button class="qopt" onclick="check(this,true,'Q14',20)">except</button>
+      <button class="qopt" onclick="check(this,false,'Q14',0)">handle</button>
+      <button class="qopt" onclick="check(this,false,'Q14',0)">error</button>
+    </div>
+    <div class="qfb" id="fb-Q14"></div>
+  </div>
+</div>
+
+<!-- L15 — ADVANCED LIBRARIES ROADMAP -->
+<div class="lesson-card" data-lesson="15">
+  <div class="lt">🗺️ Expert Libraries Roadmap</div>
+  <div class="ls">පහළොස්වෙනි පාඩම · Advanced Python Path!</div>
+  <div class="sb">
+    <div class="sbt">🚀 Expert Libraries!</div>
+    <div class="lib-grid">
+      <div class="lib-card"><div class="lib-em">🐼</div><div class="lib-name">pandas</div><div class="lib-use">Data analysis & CSV</div></div>
+      <div class="lib-card"><div class="lib-em">📊</div><div class="lib-name">matplotlib</div><div class="lib-use">Charts & graphs</div></div>
+      <div class="lib-card"><div class="lib-em">🔢</div><div class="lib-name">numpy</div><div class="lib-use">Math arrays</div></div>
+      <div class="lib-card"><div class="lib-em">🌐</div><div class="lib-name">flask</div><div class="lib-use">Web apps!</div></div>
+      <div class="lib-card"><div class="lib-em">🤖</div><div class="lib-name">sklearn</div><div class="lib-use">Machine Learning</div></div>
+      <div class="lib-card"><div class="lib-em">🕷️</div><div class="lib-name">requests</div><div class="lib-use">Web scraping</div></div>
+    </div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">🌐 Flask Web App Preview!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button></div>
+      <div class="code-block"><span class="cm"># pip install flask</span>
+<span class="kw">from</span> flask <span class="kw">import</span> Flask
+
+app = <span class="cl">Flask</span>(__name__)
+
+<span class="fn">@app.route</span>(<span class="st">"/"</span>)
+<span class="kw">def</span> <span class="fn">home</span>():
+    <span class="kw">return</span> <span class="st">"🐍 Hello Python Web!"</span>
+
+<span class="fn">@app.route</span>(<span class="st">"/greet/&lt;name&gt;"</span>)
+<span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="kw">return</span> <span class="st">f"Ayubowan, {name}! 🙏"</span>
+
+<span class="kw">if</span> __name__ == <span class="st">"__main__"</span>:
+    app.<span class="fn">run</span>()</div>
+    </div>
+  </div>
+  <div class="sb y">
+    <div class="sbt">🐼 Pandas Preview!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'# pandas simulation with built-ins\nstudents = [\n    {\"name\": \"Kasun\",  \"math\": 85, \"sci\": 90},\n    {\"name\": \"Nimal\",  \"math\": 72, \"sci\": 68},\n    {\"name\": \"Amali\",  \"math\": 95, \"sci\": 88},\n]\n\nprint(f\"{\"Name\":<10} {\"Math\":>6} {\"Sci\":>6} {\"Avg\":>8}\")\nprint(\"-\" * 35)\nfor s in students:\n    avg = (s[\"math\"] + s[\"sci\"]) / 2\n    print(f\"{s[\"name\"]:<10} {s[\"math\"]:>6} {s[\"sci\"]:>6} {avg:>8.1f}\")')">✏️ Simulate!</button></div>
+      <div class="code-block"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+data = {
+    <span class="st">"name"</span> : [<span class="st">"Kasun"</span>, <span class="st">"Nimal"</span>, <span class="st">"Amali"</span>],
+    <span class="st">"math"</span> : [<span class="nm">85</span>, <span class="nm">72</span>, <span class="nm">95</span>],
+    <span class="st">"sci"</span>  : [<span class="nm">90</span>, <span class="nm">68</span>, <span class="nm">88</span>]
+}
+df = pd.<span class="cl">DataFrame</span>(data)
+<span class="fn">print</span>(df)
+<span class="fn">print</span>(<span class="st">"\nMath Average:"</span>, df[<span class="st">"math"</span>].<span class="fn">mean</span>())</div>
+    </div>
+  </div>
+  <!-- LEARNING ROADMAP -->
+  <div class="sb v">
+    <div class="sbt">🗺️ Python Learning Path!</div>
+    <div style="position:relative;padding:10px 0;">
+      <div style="position:absolute;left:20px;top:0;bottom:0;width:3px;background:linear-gradient(#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#c77dff);border-radius:3px;"></div>
+      <div style="margin-left:40px;margin-bottom:16px;"><div style="font-size:.82rem;font-weight:800;color:var(--a1)">🐣 Beginner</div><div style="font-size:.76rem;color:var(--text2)">print, variables, if/else, loops</div></div>
+      <div style="margin-left:40px;margin-bottom:16px;"><div style="font-size:.82rem;font-weight:800;color:var(--a2)">🐍 Intermediate</div><div style="font-size:.76rem;color:var(--text2)">functions, OOP, files, error handling</div></div>
+      <div style="margin-left:40px;margin-bottom:16px;"><div style="font-size:.82rem;font-weight:800;color:var(--a3)">🦅 Advanced</div><div style="font-size:.76rem;color:var(--text2)">pandas, numpy, flask, APIs</div></div>
+      <div style="margin-left:40px;margin-bottom:16px;"><div style="font-size:.82rem;font-weight:800;color:var(--a4)">🤖 Expert</div><div style="font-size:.76rem;color:var(--text2)">Machine Learning, Django, Data Science</div></div>
+      <div style="margin-left:40px;"><div style="font-size:.82rem;font-weight:800;color:var(--a5)">🐉 Dragon</div><div style="font-size:.76rem;color:var(--text2)">AI, Neural Networks, Open Source!</div></div>
+    </div>
+  </div>
+  <div id="runner-15" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Free Sandbox — ඕනෑ code ලිහිල්ලා try!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-15')">🗑️</button><button class="run-btn" id="run-15" onclick="runCode('runner-15')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-15" spellcheck="false">import math, random
+
+# Pandas simulation
+students = [
+    {"name": "Kasun",  "math": 85, "sci": 90},
+    {"name": "Nimal",  "math": 72, "sci": 68},
+    {"name": "Amali",  "math": 95, "sci": 88},
+]
+
+print(f"{'Name':<10} {'Math':>6} {'Sci':>5} {'Avg':>7}")
+print("-" * 32)
+for s in students:
+    avg = (s["math"] + s["sci"]) / 2
+    star = "⭐" if avg >= 85 else ""
+    print(f"{s['name']:<10} {s['math']:>6} {s['sci']:>5} {avg:>7.1f} {star}")</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-15"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">📝 Assignment 15 <span style="font-size:.75rem;color:var(--text2)">(+25 pts)</span></div>
+    <div class="qzq">✨ Data Science library?</div>
+    <div class="qzopts" id="opts-Q15">
+      <button class="qopt" onclick="check(this,false,'Q15',0)">flask</button>
+      <button class="qopt" onclick="check(this,true,'Q15',25)">pandas</button>
+      <button class="qopt" onclick="check(this,false,'Q15',0)">math</button>
+      <button class="qopt" onclick="check(this,false,'Q15',0)">os</button>
+    </div>
+    <div class="qfb" id="fb-Q15"></div>
+  </div>
+</div>
+
+<!-- L16 — FINAL MEGA PROJECT -->
+<div class="lesson-card" data-lesson="16">
+  <div class="lt">🏆 Final Mega Project!</div>
+  <div class="ls">දොළොස්වෙනි පාඩම · ඔයා Python Developer!</div>
+  <div class="sb">
+    <div class="sbt">🌟 ඔයා ඉගෙන ගත්ත සියල්ල!</div>
+    <div class="badge-row">
+      <span class="badge bb">📢 print</span><span class="badge by">📦 Variables</span><span class="badge bg">🔑 Keywords</span><span class="badge bp">📋 Sequence</span><span class="badge bb">🤔 If/Else</span><span class="badge by">🔁 Loops</span><span class="badge bg">🧩 Functions</span><span class="badge bp">📚 Lists</span><span class="badge bb">🔤 Strings</span><span class="badge by">🏗️ OOP</span><span class="badge bg">👨‍👩‍👧 Inherit</span><span class="badge bp">📁 Files</span><span class="badge bv">📦 Libraries</span><span class="badge bb">🛡️ Errors</span>
+    </div>
+  </div>
+  <div class="sb g">
+    <div class="sbt">🚀 Complete Bank System!</div>
+    <div class="code-wrap">
+      <div class="code-toolbar"><button class="copy-btn" onclick="doCopy(this)">📋 Copy</button><button class="edit-btn" onclick="sendToEditor(this,'class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner   = owner\n        self.balance = balance\n        self.history = []\n\n    def deposit(self, amount):\n        if amount > 0:\n            self.balance += amount\n            self.history.append(f\"+{amount}\")\n            print(f\"Deposited Rs.{amount}. Balance: Rs.{self.balance}\")\n\n    def withdraw(self, amount):\n        if amount > self.balance:\n            print(\"Insufficient funds!\")\n        else:\n            self.balance -= amount\n            self.history.append(f\"-{amount}\")\n            print(f\"Withdrew Rs.{amount}. Balance: Rs.{self.balance}\")\n\n    def statement(self):\n        print(f\"\\n=== {self.owner} Statement ===\")\n        for h in self.history:\n            print(\" \", h)\n        print(f\"Final Balance: Rs.{self.balance}\")\n\nacc = BankAccount(\"Kasun\", 1000)\nacc.deposit(500)\nacc.withdraw(200)\nacc.deposit(300)\nacc.withdraw(2000)\nacc.statement()')">✏️ Run Full Project!</button></div>
+      <div class="code-block"><span class="kw">class</span> <span class="cl">BankAccount</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, owner, balance=<span class="nm">0</span>):
+        self.owner   = owner
+        self.balance = balance
+        self.history = []
+
+    <span class="kw">def</span> <span class="fn">deposit</span>(self, amount):
+        <span class="kw">if</span> amount > <span class="nm">0</span>:
+            self.balance += amount
+            self.history.<span class="fn">append</span>(<span class="st">f"+{amount}"</span>)
+            <span class="fn">print</span>(<span class="st">f"Deposited Rs.{amount}"</span>)
+
+    <span class="kw">def</span> <span class="fn">withdraw</span>(self, amount):
+        <span class="kw">try</span>:
+            <span class="kw">if</span> amount > self.balance:
+                <span class="kw">raise</span> <span class="cl">ValueError</span>(<span class="st">"Insufficient!"</span>)
+            self.balance -= amount
+        <span class="kw">except</span> <span class="cl">ValueError</span> <span class="kw">as</span> e:
+            <span class="fn">print</span>(<span class="st">f"Error: {e}"</span>)
+
+    <span class="kw">def</span> <span class="fn">statement</span>(self):
+        <span class="fn">print</span>(<span class="st">f"Balance: Rs.{self.balance}"</span>)
+        <span class="kw">for</span> h <span class="kw">in</span> self.history:
+            <span class="fn">print</span>(<span class="st">" "</span>, h)
+
+acc = <span class="cl">BankAccount</span>(<span class="st">"Kasun"</span>, <span class="nm">1000</span>)
+acc.<span class="fn">deposit</span>(<span class="nm">500</span>)
+acc.<span class="fn">withdraw</span>(<span class="nm">200</span>)
+acc.<span class="fn">statement</span>()</div>
+    </div>
+  </div>
+  <div id="runner-16" class="runner-wrap">
+    <div class="runner-header">
+      <div class="runner-title">🚀 Free Sandbox — Expert Level!</div>
+      <div style="display:flex;gap:6px;"><button class="clear-btn" onclick="clearRunner('runner-16')">🗑️</button><button class="run-btn" id="run-16" onclick="runCode('runner-16')">▶ Run</button></div>
+    </div>
+    <textarea class="code-editor" id="editor-16" spellcheck="false">import random, math
+
+class Student:
+    def __init__(self, name):
+        self.name   = name
+        self.scores = []
+    
+    def add_score(self, s):
+        self.scores.append(s)
+    
+    def average(self):
+        return sum(self.scores) / len(self.scores) if self.scores else 0
+    
+    def grade(self):
+        avg = self.average()
+        if   avg >= 90: return "🥇 A+"
+        elif avg >= 80: return "🥇 A"
+        elif avg >= 70: return "🥈 B"
+        elif avg >= 60: return "🥉 C"
+        else:           return "❌ F"
+    
+    def report(self):
+        print(f"\n👤 {self.name}")
+        print(f"   Scores : {self.scores}")
+        print(f"   Average: {self.average():.1f}")
+        print(f"   Grade  : {self.grade()}")
+
+students = [Student("Kasun"), Student("Nimal"), Student("Amali")]
+subjects = 4
+
+for s in students:
+    for _ in range(subjects):
+        s.add_score(random.randint(55, 100))
+
+print("=" * 38)
+print("  📊 Class Report (Random Scores)")
+print("=" * 38)
+for s in students:
+    s.report()
+print("\n✅ Done!")</textarea>
+    <div class="output-label">📺 Output:</div>
+    <div class="output-area" id="output-16"><span style="color:var(--text2);font-size:.78rem;">▶ Run...</span></div>
+  </div>
+  <div class="quiz-box">
+    <div class="qzt">🏆 Final Quiz! <span style="font-size:.75rem;color:var(--text2)">(+30 pts)</span></div>
+    <div class="qzq">✨ OOP, Files, Libraries — ඔයාට Python Expert වෙන්නට කොතෙකුත් ඉගෙනගන්නවද?</div>
+    <div class="qzopts" id="opts-Q16">
+      <button class="qopt" onclick="check(this,false,'Q16',0)">ඔව්, ගොඩක් ඕනෑ, කරලා බලන්නෑ!</button>
+      <button class="qopt" onclick="check(this,true,'Q16',30)">ඔව්, Practice ගොඩක් කරලා Expert වෙනවා! 🚀</button>
+      <button class="qopt" onclick="check(this,false,'Q16',0)">නෑ, Python ඉවරයි!</button>
+      <button class="qopt" onclick="check(this,false,'Q16',0)">Python boring!</button>
+    </div>
+    <div class="qfb" id="fb-Q16"></div>
+    <div style="margin-top:16px;text-align:center;">
+      <button class="run-btn" style="margin:auto;background:linear-gradient(135deg,#ffd93d,#ff6b6b);color:#000;font-size:1rem;" onclick="showCongrats()">🏆 Course Complete!</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- NAV -->
+<div class="nav-btns">
+  <button class="nav-btn btn-back" id="btn-back" onclick="navigate(-1)" disabled>← ආපහු</button>
+  <div class="ldots" id="ldots"></div>
+  <button class="nav-btn btn-next" id="btn-next" onclick="navigate(1)">ඉදිරියට →</button>
+</div>
+
+<!-- MASCOT -->
+<div class="mascot" onclick="toggleBubble()">🤖</div>
+<div class="mbub" id="mbub">👋 Run button click කරන්න!<br>Live Python! 🐍</div>
+
+<!-- LEVEL UP POPUP -->
+<div class="levelup-popup hide" id="lu">
+  <div class="lu-em" id="lu-em">🐍</div>
+  <div class="lu-title" id="lu-title">Level Up!</div>
+  <div class="lu-sub" id="lu-sub">ඔයා Level Up ගත්තා!</div>
+  <button class="lu-btn" onclick="document.getElementById('lu').classList.add('hide')">🚀 Continue!</button>
+</div>
+
+<!-- CONGRATS -->
+<div id="cong">
+  <div class="ce">🎉</div>
+  <div class="ct">ජය ගත්තා! 🏆</div>
+  <div class="cd">
+    ඔයා Python Complete Course ඉගෙන ගත්තා! 🐍<br>
+    OOP · Files · Libraries · Error Handling ✅<br><br>
+    <strong style="color:var(--a2)">Total Points: <span id="cong-pts">0</span> ⭐</strong><br>
+    <strong style="color:var(--a5)">Final Level: <span id="cong-level">🐉 Python Dragon!</span></strong>
+  </div>
+  <button class="rbtn" onclick="restartCourse()">🔄 නැවත ඉගෙනගමු!</button>
+</div>
+
+<script>
+// ═══════════════ STARS ═══════════════
+(function(){const c=document.getElementById('stars-bg');for(let i=0;i<80;i++){const s=document.createElement('div');s.className='star';const z=Math.random()*3+1;s.style.cssText=`width:${z}px;height:${z}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${Math.random()*4+2}s;animation-delay:${Math.random()*4}s`;c.appendChild(s);}})();
+
+// ═══════════════ GAMIFICATION ═══════════════
+let totalPts = 0;
+const LEVELS = [
+  {min:0,   name:"🐣 Python Baby",   em:"🐣"},
+  {min:30,  name:"🐍 Python Hatchling",em:"🐍"},
+  {min:80,  name:"🌱 Python Sprout",  em:"🌱"},
+  {min:150, name:"⚡ Python Coder",   em:"⚡"},
+  {min:250, name:"🦅 Python Hawk",    em:"🦅"},
+  {min:380, name:"💎 Python Wizard",  em:"💎"},
+  {min:500, name:"🐉 Python Dragon",  em:"🐉"},
+];
+
+function getLevel(pts){
+  let lv=LEVELS[0];
+  for(const l of LEVELS) if(pts>=l.min) lv=l;
+  return lv;
+}
+
+function addPoints(pts, questionId){
+  if(pts<=0) return;
+  const prev = getLevel(totalPts);
+  totalPts += pts;
+  document.getElementById('pts-val').textContent = totalPts;
+  const curr = getLevel(totalPts);
+  document.getElementById('level-badge').textContent = curr.name;
+  confetti();
+  showPtsPopup(pts);
+  if(curr.name !== prev.name) showLevelUp(curr);
+}
+
+function showPtsPopup(pts){
+  const d=document.createElement('div');
+  d.className='pts-popup';d.textContent=`+${pts} ⭐`;
+  document.body.appendChild(d);setTimeout(()=>d.remove(),1500);
+}
+
+function showLevelUp(lv){
+  const el=document.getElementById('lu');
+  document.getElementById('lu-em').textContent=lv.em;
+  document.getElementById('lu-title').textContent='Level Up! 🎉';
+  document.getElementById('lu-sub').textContent=`ඔයා දැන් "${lv.name}"!`;
+  el.classList.remove('hide');
+}
+
+// ═══════════════ NAV ═══════════════
+const TOTAL=16; let cur=1;
+const ld=document.getElementById('ldots');
+for(let i=1;i<=TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===1?' active':'');d.onclick=()=>goTo(i);ld.appendChild(d);}
+
+function navigate(dir){goTo(cur+dir);}
+function goTo(n){
+  if(n<1||n>TOTAL)return;
+  document.querySelector(`.lesson-card[data-lesson="${cur}"]`).classList.remove('active');
+  cur=n;
+  document.querySelector(`.lesson-card[data-lesson="${cur}"]`).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('lctr').textContent=`${cur} / ${TOTAL}`;
+  document.getElementById('pf').style.width=`${(cur/TOTAL)*100}%`;
+  document.getElementById('btn-back').disabled=(cur===1);
+  document.getElementById('btn-next').disabled=(cur===TOTAL);
+  document.querySelectorAll('.dot').forEach((d,i)=>{d.className='dot'+(i+1===cur?' active':i+1<cur?' done':'');});
+  if(cur===1)startTyping();
+  const tips=["Run button try! 🚀","Variables memory! 📦","Magic keywords! 🪄","Order matters! ☝️","if/else decisions! 🤔","Loops repeat! 🔁","def = function! 🧩","Lists & Dicts! 📚","String magic! 🔤","class = OOP! 🏗️","Inherit parent! 👨‍👩‍👧","Files read/write! 📁","import = power! 📦","try/except! 🛡️","Expert path! 🗺️","You are a dev! 🏆"];
+  document.getElementById('mbub').textContent=tips[cur-1]||'🐍';
+}
+
+// ═══════════════ TYPING ═══════════════
+let typingDone=false;
+const lines=["Python = \"රොබෝ කෙනෙකුට කතා කරන භාෂාව\" 🤖","Robot ට කියන දේ Robot කරනවා!","print() ලිව්වම screen ලෙස show කරනවා! 📢","පහළ Editor ලෙස ඔයාගේ code type කරලා Run කරන්න! 🚀"];
+function startTyping(){
+  if(typingDone)return;typingDone=true;
+  const el=document.getElementById('intro-text');el.innerHTML='';
+  let li=0,ci=0;
+  function t(){
+    if(li>=lines.length){const c=document.createElement('span');c.className='tcursor';el.appendChild(c);return;}
+    if(ci===0){const p=document.createElement('p');p.style.marginBottom='5px';p.dataset.i=li;el.appendChild(p);}
+    const p=el.querySelector(`p[data-i="${li}"]`);
+    if(ci<lines[li].length){p.textContent+=lines[li][ci];ci++;setTimeout(t,25);}
+    else{li++;ci=0;setTimeout(t,360);}
+  }
+  setTimeout(t,300);
+}
+
+// ═══════════════ QUIZ ═══════════════
+const OK=["🎉 නිවැරදියි! ජය ගත්තා!","✅ Excellent! හරියටම!","🌟 Perfect! නිවැරදිම!","🔥 Correct! ශූරයා!","💪 Great job! "];
+const NO=["❌ Try Again! Code block නැවත බලන්න.","😅 Not quite! ඉගෙනගත් ටික review!","💡 Hint: lesson ලෙස නැවත readකරන්න!"];
+const answered={};
+function check(btn,ok,id,pts){
+  if(answered[id])return;
+  answered[id]=true;
+  document.querySelectorAll(`#opts-${id} .qopt`).forEach(o=>o.setAttribute('disabled',''));
+  const fb=document.getElementById('fb-'+id);
+  btn.classList.add(ok?'correct':'wrong');
+  fb.className='qfb show '+(ok?'ok':'no');
+  fb.textContent=ok?OK[Math.floor(Math.random()*OK.length)]:NO[Math.floor(Math.random()*NO.length)];
+  if(ok&&pts>0) addPoints(pts,id);
+}
+
+// ═══════════════ CONFETTI ═══════════════
+function confetti(){
+  const cols=['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#c77dff','#ff9f43'];
+  for(let i=0;i<30;i++){const c=document.createElement('div');c.className='cf';c.style.cssText=`left:${Math.random()*100}%;background:${cols[Math.floor(Math.random()*cols.length)]};--d:${Math.random()*2+.7}s;animation-delay:${Math.random()*.4}s;border-radius:${Math.random()>.5?'50%':'3px'}`;document.body.appendChild(c);setTimeout(()=>c.remove(),2600);}
+}
+
+// ═══════════════ MASCOT ═══════════════
+function toggleBubble(){const b=document.getElementById('mbub');b.classList.toggle('show');setTimeout(()=>b.classList.remove('show'),4000);}
+
+// ═══════════════ COPY ═══════════════
+function doCopy(btn){
+  const block=btn.closest('.code-wrap').querySelector('.code-block');
+  navigator.clipboard.writeText(block.innerText).then(()=>{btn.textContent='✅ Copied!';setTimeout(()=>{btn.innerHTML='📋 Copy';},2000);});
+}
+
+// ═══════════════ SEND TO EDITOR ═══════════════
+function sendToEditor(btn, code){
+  const runnerWrap = btn.closest('.lesson-card').querySelector('.runner-wrap');
+  if(!runnerWrap) return;
+  const editor = runnerWrap.querySelector('.code-editor');
+  if(editor) { editor.value=code; editor.focus(); }
+}
+
+// ═══════════════ PYODIDE ═══════════════
+let pyodide=null, pyodideLoading=false, pyodideReady=false;
+
+async function loadPyodideEngine(){
+  if(pyodideReady||pyodideLoading)return;
+  pyodideLoading=true;
+  // Show loading on all outputs
+  document.querySelectorAll('.output-area').forEach(o=>{
+    o.innerHTML='<span style="color:var(--text2);font-size:.78rem;"><span class="spin">⚙️</span> Python engine loading... (first time takes ~20s)</span>';
+  });
+  try{
+    pyodide = await loadPyodide();
+    pyodideReady=true;
+    document.querySelectorAll('.output-area').forEach(o=>{
+      o.innerHTML='<span style="color:var(--a3);font-size:.78rem;">✅ Python ready! ▶ Run click කරන්න!</span>';
+    });
+    document.querySelectorAll('.run-btn').forEach(b=>b.disabled=false);
+  }catch(e){
+    document.querySelectorAll('.output-area').forEach(o=>{
+      o.innerHTML='<span style="color:var(--a1);font-size:.78rem;">❌ Load failed. Refresh try!</span>';
+    });
+  }
+}
+
+async function runCode(wrapperId){
+  if(!pyodideReady){
+    await loadPyodideEngine();
+    if(!pyodideReady)return;
+  }
+  const wrap=document.getElementById(wrapperId);
+  const editor=wrap.querySelector('.code-editor');
+  const output=wrap.querySelector('.output-area');
+  const code=editor.value;
+  output.innerHTML='';
+  const lines=[];
+  pyodide.setStdout({batched:(s)=>{lines.push({t:'ok',v:s});}});
+  pyodide.setStderr({batched:(s)=>{lines.push({t:'err',v:s});}});
+  try{
+    await pyodide.runPythonAsync(code);
+  }catch(e){
+    lines.push({t:'err',v:String(e)});
+  }
+  if(lines.length===0){output.innerHTML='<span style="color:var(--text2);font-size:.78rem;">(no output)</span>';}
+  else{lines.forEach(l=>{const d=document.createElement('div');d.className='output-line '+(l.t==='err'?'err':'ok');d.textContent=l.v;output.appendChild(d);});}
+}
+
+function clearRunner(wrapperId){
+  const wrap=document.getElementById(wrapperId);
+  wrap.querySelector('.output-area').innerHTML='<span style="color:var(--text2);font-size:.78rem;">▶ Run click...</span>';
+}
+
+// ═══════════════ CONGRATS ═══════════════
+function showCongrats(){
+  document.getElementById('cong-pts').textContent=totalPts;
+  document.getElementById('cong-level').textContent=getLevel(totalPts).name;
+  document.getElementById('cong').classList.add('show');
+  confetti();setTimeout(confetti,700);setTimeout(confetti,1400);
+}
+
+// ═══════════════ RESTART ═══════════════
+function restartCourse(){
+  document.querySelectorAll('.qopt').forEach(o=>{o.removeAttribute('disabled');o.classList.remove('correct','wrong');});
+  document.querySelectorAll('.qfb').forEach(f=>{f.className='qfb';f.textContent='';});
+  Object.keys(answered).forEach(k=>delete answered[k]);
+  totalPts=0;
+  document.getElementById('pts-val').textContent='0';
+  document.getElementById('level-badge').textContent='🐣 Python Baby';
+  typingDone=false;
+  document.getElementById('intro-text').innerHTML='';
+  document.getElementById('cong').classList.remove('show');
+  goTo(1);
+}
+
+// INIT
+startTyping();
+// Pre-load pyodide after a short delay
+setTimeout(loadPyodideEngine, 1500);
+setTimeout(()=>{const b=document.getElementById('mbub');b.classList.add('show');setTimeout(()=>b.classList.remove('show'),5000);},2000);
+</script>
+</body>
+</html>
